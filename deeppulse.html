@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeepPulse — Sound Ecosystems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,200;1,300&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #06080f;
+      --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.07);
+      --border-light: rgba(255,255,255,0.12);
+      --text: #e8eaf2;
+      --text-dim: rgba(232,234,242,0.55);
+      --text-faint: rgba(232,234,242,0.28);
+      --accent: #7eb8c9;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--black);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      mix-blend-mode: overlay;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 56px;
+      background: linear-gradient(to bottom, rgba(6,8,15,0.95), transparent);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--text-dim); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 48px 80px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 70% at 50% 20%, rgba(20,35,80,0.8) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(15,40,70,0.5) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(10,30,60,0.4) 0%, transparent 55%),
+        linear-gradient(180deg, #07091a 0%, #06080f 100%);
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: 600px; height: 600px;
+      top: -200px; left: 50%;
+      background: radial-gradient(circle, rgba(30,60,120,0.35) 0%, transparent 70%);
+      animation: orb-center 8s ease-in-out infinite;
+    }
+    .hero-orb-2 {
+      width: 400px; height: 400px;
+      bottom: 0; left: -100px;
+      background: radial-gradient(circle, rgba(20,50,90,0.25) 0%, transparent 70%);
+      animation: orb-float 10s ease-in-out infinite reverse;
+    }
+    .hero-orb-3 {
+      width: 350px; height: 350px;
+      bottom: 100px; right: -80px;
+      background: radial-gradient(circle, rgba(126,184,201,0.08) 0%, transparent 70%);
+      animation: orb-float 12s ease-in-out infinite;
+    }
+
+    @keyframes orb-center {
+      0%,100% { transform: translateX(-50%) scale(1); opacity:0.6; }
+      50% { transform: translateX(-50%) scale(1.12); opacity:1; }
+    }
+    @keyframes orb-float {
+      0%,100% { transform: scale(1); opacity:0.6; }
+      50% { transform: scale(1.15) translateY(-12px); opacity:1; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 300;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.3s;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(80px, 13vw, 148px);
+      font-weight: 200;
+      line-height: 0.88;
+      letter-spacing: -3px;
+      color: white;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.5s;
+    }
+
+    .hero-rule {
+      width: 40px;
+      height: 1px;
+      background: rgba(126,184,201,0.4);
+      margin: 0 auto 32px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.65s;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-dim);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.75s;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-faint);
+      line-height: 1.95;
+      max-width: 440px;
+      margin: 0 auto 52px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.9s;
+    }
+
+    .hero-ecosystem-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      font-weight: 300;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.95s;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.1s;
+    }
+
+    .btn-eco {
+      padding: 22px 40px;
+      border: 1px solid var(--border-light);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-width: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-eco::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .btn-eco:hover::after { transform: scaleX(1); }
+
+    .btn-eco::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    }
+
+    .btn-eco-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      line-height: 1;
+      transition: letter-spacing 0.4s ease;
+    }
+
+    .btn-eco-sub {
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      transition: color 0.3s;
+    }
+
+    .btn-eco-primary {
+      border-color: rgba(255,255,255,0.16);
+      background: linear-gradient(160deg, rgba(22,38,96,0.6) 0%, rgba(12,18,52,0.5) 100%);
+    }
+    .btn-eco-primary .btn-eco-name { color: white; }
+    .btn-eco-primary::after {
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    }
+    .btn-eco-primary:hover {
+      background: linear-gradient(160deg, rgba(28,48,112,0.75) 0%, rgba(16,24,64,0.65) 100%);
+      border-color: rgba(255,255,255,0.26);
+    }
+    .btn-eco-primary:hover .btn-eco-name { letter-spacing: 1px; }
+
+    .btn-eco-secondary {
+      border-color: rgba(126,184,201,0.2);
+      background: linear-gradient(160deg, rgba(126,184,201,0.06) 0%, rgba(80,140,165,0.04) 100%);
+    }
+    .btn-eco-secondary .btn-eco-name { color: var(--accent); }
+    .btn-eco-secondary::after {
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.3), transparent);
+    }
+    .btn-eco-secondary:hover {
+      background: linear-gradient(160deg, rgba(126,184,201,0.12) 0%, rgba(80,140,165,0.08) 100%);
+      border-color: rgba(126,184,201,0.38);
+    }
+    .btn-eco-secondary:hover .btn-eco-name { letter-spacing: 1px; }
+
+    /* Keep old btn-accent for North Vale section */
+    .btn-accent {
+      padding: 15px 32px;
+      border: 1px solid rgba(126,184,201,0.25);
+      background: rgba(126,184,201,0.05);
+      color: var(--accent);
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-accent:hover {
+      background: rgba(126,184,201,0.1);
+      border-color: rgba(126,184,201,0.45);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      right: 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.3s;
+    }
+    .hero-scroll span {
+      font-size: 9px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, var(--text-faint), transparent);
+      animation: scroll-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse {
+      0%,100% { opacity:0.3; }
+      50% { opacity:0.9; }
+    }
+
+    /* ── SHARED ── */
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 56px;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 300;
+      margin-bottom: 18px;
+      opacity: 0.8;
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 4.5vw, 56px);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      color: white;
+      margin-bottom: 18px;
+    }
+
+    .sec-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.9;
+      max-width: 500px;
+      margin-bottom: 56px;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    /* ── ECO CARDS ── */
+    .eco-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .eco-card {
+      background: linear-gradient(145deg, rgba(18,28,70,0.55) 0%, rgba(10,16,44,0.45) 100%);
+      padding: 52px 44px 44px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.4s;
+    }
+    .eco-card:hover {
+      background: linear-gradient(145deg, rgba(22,36,88,0.7) 0%, rgba(14,22,58,0.6) 100%);
+    }
+    .eco-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.2), transparent);
+    }
+
+    .eco-num {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--text-faint);
+      font-weight: 300;
+      margin-bottom: 36px;
+    }
+
+    .eco-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 300;
+      color: white;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+      line-height: 1.1;
+    }
+
+    .eco-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.85;
+      margin-bottom: 40px;
+    }
+
+    .eco-link {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 300;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: gap 0.3s, opacity 0.3s;
+      opacity: 0.65;
+    }
+    .eco-link::after { content: '→'; font-size: 13px; }
+    .eco-link:hover { gap: 16px; opacity: 1; }
+
+    /* ── CATALOGUE ── */
+    .cat-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .cat-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 22px 32px;
+      background: linear-gradient(145deg, rgba(18,28,70,0.3), rgba(6,8,15,0.6));
+      gap: 20px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    .cat-text {
+      background: linear-gradient(145deg, rgba(18,28,70,0.3), rgba(6,8,15,0.6));
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .cat-since {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 300;
+      opacity: 0.7;
+    }
+
+    .cat-body {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.95;
+    }
+
+    /* ── NORTH VALE ── */
+    .nv-wrap {
+      text-align: center;
+    }
+    .nv-wrap .sec-desc {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .nv-line {
+      width: 1px;
+      height: 64px;
+      background: linear-gradient(to bottom, rgba(126,184,201,0.35), transparent);
+      margin: 0 auto 44px;
+    }
+
+    /* ── FOOTER ── */
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 56px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: white;
+    }
+    .footer-tagline {
+      font-size: 11px;
+      color: var(--text-faint);
+      font-weight: 300;
+    }
+    .footer-nav {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .footer-nav a {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-decoration: none;
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--text-dim); }
+    .footer-copy {
+      font-size: 10px;
+      color: var(--text-faint);
+      letter-spacing: 2px;
+      font-weight: 300;
+    }
+
+    /* ── CATALOGUE MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4,6,14,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: linear-gradient(160deg, rgba(16,26,68,0.95) 0%, rgba(8,12,30,0.98) 100%);
+      border: 1px solid var(--border-light);
+      max-width: 640px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.35s ease;
+    }
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+    .modal::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.3), transparent);
+    }
+
+    .modal-header {
+      padding: 40px 40px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .modal-eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 300;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: white;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .modal-close {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-faint);
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .modal-close:hover {
+      border-color: var(--border-light);
+      color: var(--text-dim);
+    }
+
+    .modal-body {
+      padding: 0 40px 40px;
+    }
+
+    .modal-artist {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .modal-artist:last-child { border-bottom: none; }
+
+    .modal-artist-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: white;
+      letter-spacing: -0.3px;
+    }
+
+    .modal-platforms {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .modal-platform {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      text-decoration: none;
+      font-weight: 300;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .modal-platform:hover {
+      color: var(--accent);
+      border-color: rgba(126,184,201,0.3);
+    }
+    .modal-platform.active {
+      color: var(--accent);
+      border-color: rgba(126,184,201,0.25);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(20px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 24px 28px; }
+      .nav-links { display: none; }
+      .wrap { padding: 72px 28px; }
+      .eco-grid { grid-template-columns: 1fr; }
+      .cat-layout { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; gap: 28px; text-align: center; padding: 40px 28px; }
+      .footer-nav { justify-content: center; }
+      .hero-scroll { right: 28px; }
+      .modal-header { padding: 28px 24px 20px; }
+      .modal-body { padding: 0 24px 32px; }
+      .modal-artist { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .modal-platforms { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">DeepPulse</a>
+    <ul class="nav-links">
+      <li><a href="#ecosystem">Ecosystem</a></li>
+      <li><a href="#catalogue">Catalogue</a></li>
+      <li><a href="#northvale">North Vale</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Sound Ecosystems</p>
+      <h1 class="hero-title">DeepPulse</h1>
+      <div class="hero-rule"></div>
+      <p class="hero-desc">DeepPulse develops music catalogues and sound environments designed for sleep, focus and therapeutic spaces.</p>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="wrap" id="ecosystem">
+    <p class="eyebrow">The Ecosystem</p>
+    <h2 class="sec-title">The DeepPulse Ecosystem</h2>
+    <p class="sec-desc">DeepPulse operates across two complementary areas: music catalogue development and sound environment platforms designed for wellness, focus and therapeutic spaces.</p>
+    <div class="eco-grid">
+      <div class="eco-card" id="card-records">
+        <p class="eco-desc">Catalogue development and artist projects focused on sleep, ambient and therapeutic listening environments, distributed across major streaming platforms.</p>
+        <a href="#" class="eco-link" onclick="openCatalogue(event)">Explore the Catalogue</a>
+      </div>
+      <div class="eco-card" id="card-northvale">
+        <p class="eco-desc">A sound environment platform designed for clinics, wellness spaces and calm environments.</p>
+        <a href="https://northvalemusic.com" class="eco-link">Enter North Vale</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="wrap" id="catalogue">
+    <p class="eyebrow">Overview</p>
+    <h2 class="sec-title">Catalogue Overview</h2>
+    <p class="sec-desc">DeepPulse compositions are distributed across major streaming platforms and designed for continuous listening environments across sleep, focus and ambient wellness categories.</p>
+    <div class="cat-layout">
+      <div class="cat-stats">
+        <div class="stat-row">
+          <span class="stat-label">Artist Projects</span>
+          <span class="stat-value">8</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Focus</span>
+          <span class="stat-value">Sleep / Ambient / Wellness</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Release Strategy</span>
+          <span class="stat-value">Continuous Releases</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Platforms</span>
+          <span class="stat-value">Spotify · Apple Music · Pandora</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Since</span>
+          <span class="stat-value">2024</span>
+        </div>
+      </div>
+      <div class="cat-text">
+        <p class="cat-since">Independent catalogue development since 2024</p>
+        <p class="cat-body">DeepPulse compositions are developed with a specific sonic environment in mind — sleep, deep focus, ambient rest and therapeutic spaces. Each project is designed for continuous listening across all major streaming platforms.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="wrap nv-wrap" id="northvale">
+    <p class="eyebrow">Sound Environments</p>
+    <h2 class="sec-title">Sound environments</h2>
+    <p class="sec-desc">Some DeepPulse compositions power sound environments within the North Vale platform, designed for therapeutic and wellness spaces.</p>
+    <div class="nv-line"></div>
+    <a href="https://northvalemusic.com" class="btn-accent">Visit North Vale</a>
+  </div>
+
+  <div class="divider"></div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">DeepPulse</span>
+        <span class="footer-tagline">Sound ecosystems for sleep and ambient environments.</span>
+      </div>
+      <ul class="footer-nav">
+        <li><a href="#catalogue">DeepPulse Records</a></li>
+        <li><a href="https://northvalemusic.com">North Vale Music</a></li>
+      </ul>
+      <span class="footer-copy">2026</span>
+    </div>
+  </footer>
+
+  <!-- CATALOGUE MODAL -->
+  <div class="modal-overlay" id="catalogueModal" onclick="closeCatalogueOutside(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <p class="modal-eyebrow">DeepPulse Records</p>
+          <h2 class="modal-title">Artist Catalogue</h2>
+        </div>
+        <button class="modal-close" onclick="closeCatalogue()">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-artist">
+          <span class="modal-artist-name">Remøra</span>
+          <div class="modal-platforms">
+            <a href="https://open.spotify.com/artist/0Nbqt5GUfuG7JetAjGcBxl" target="_blank" class="modal-platform active">Spotify</a>
+            <span class="modal-platform">Apple Music</span>
+            <span class="modal-platform">Pandora</span>
+          </div>
+        </div>
+
+        <div class="modal-artist">
+          <span class="modal-artist-name">Novarion</span>
+          <div class="modal-platforms">
+            <a href="https://open.spotify.com/artist/7DiT7CA5PgStZrg6shM4Pl" target="_blank" class="modal-platform active">Spotify</a>
+            <span class="modal-platform">Apple Music</span>
+            <span class="modal-platform">Pandora</span>
+          </div>
+        </div>
+
+        <div class="modal-artist">
+          <span class="modal-artist-name">Evan Lorne</span>
+          <div class="modal-platforms">
+            <a href="https://open.spotify.com/artist/69gxEeYESyS449DEMFHmRE" target="_blank" class="modal-platform active">Spotify</a>
+            <span class="modal-platform">Apple Music</span>
+            <span class="modal-platform">Pandora</span>
+          </div>
+        </div>
+
+        <div class="modal-artist">
+          <span class="modal-artist-name">Theo Somna</span>
+          <div class="modal-platforms">
+            <span class="modal-platform">Spotify</span>
+            <span class="modal-platform">Apple Music</span>
+            <span class="modal-platform">Pandora</span>
+          </div>
+        </div>
+
+        <div class="modal-artist">
+          <span class="modal-artist-name">Owen Marek</span>
+          <div class="modal-platforms">
+            <span class="modal-platform">Spotify</span>
+            <span class="modal-platform">Apple Music</span>
+            <span class="modal-platform">Pandora</span>
+          </div>
+        </div>
+
+        <div class="modal-artist">
+          <span class="modal-artist-name">Elias Varyn</span>
+          <div class="modal-platforms">
+            <span class="modal-platform">Spotify</span>
+            <span class="modal-platform">Apple Music</span>
+            <span class="modal-platform">Pandora</span>
+          </div>
+        </div>
+
+        <div class="modal-artist">
+          <span class="modal-artist-name">Noah Selvek</span>
+          <div class="modal-platforms">
+            <span class="modal-platform">Spotify</span>
+            <span class="modal-platform">Apple Music</span>
+            <span class="modal-platform">Pandora</span>
+          </div>
+        </div>
+
+        <div class="modal-artist">
+          <span class="modal-artist-name">Milan Orvek</span>
+          <div class="modal-platforms">
+            <span class="modal-platform">Spotify</span>
+            <span class="modal-platform">Apple Music</span>
+            <span class="modal-platform">Pandora</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openCatalogue(e) {
+      e.preventDefault();
+      document.getElementById('catalogueModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCatalogue() {
+      document.getElementById('catalogueModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeCatalogueOutside(e) {
+      if (e.target === document.getElementById('catalogueModal')) closeCatalogue();
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCatalogue(); });
+  </script>
+
+</body>
+</html>
