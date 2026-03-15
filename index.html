@@ -110,13 +110,24 @@
     .eco-link::after { content: '→'; font-size: 12px; }
     .eco-link:hover { gap: 18px; opacity: 1; }
 
-    .cat-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06); border-top: none; }
-    .cat-stats { display: flex; flex-direction: column; gap: 1px; }
+    /* ── CATALOGUE STATS ── */
+    .cat-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-top: none;
+      overflow: hidden;
+    }
+
+    .cat-stats { display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+
     .stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 22px 36px; background: linear-gradient(145deg, rgba(14,22,58,0.35), rgba(5,7,18,0.65)); gap: 20px; transition: background 0.3s; }
     .stat-row:hover { background: linear-gradient(145deg, rgba(18,28,70,0.45), rgba(8,10,25,0.7)); }
     .stat-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-faint); font-weight: 300; flex-shrink: 0; opacity: 0.8; }
     .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; color: rgba(232,234,242,0.6); text-align: right; letter-spacing: -0.2px; }
-    .cat-text { background: linear-gradient(145deg, rgba(14,22,58,0.35), rgba(5,7,18,0.65)); padding: 48px 44px; display: flex; flex-direction: column; justify-content: center; }
+    .cat-text { background: linear-gradient(145deg, rgba(14,22,58,0.35), rgba(5,7,18,0.65)); padding: 48px 44px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
 
     /* ── RADIO PLACEMENTS ── */
     .radio-row {
@@ -124,6 +135,7 @@
       align-items: flex-start;
       gap: 16px;
       padding: 28px 36px;
+      overflow: hidden;
     }
 
     .radio-track-wrap {
@@ -153,10 +165,7 @@
       border: 1px solid rgba(255,255,255,0.08);
     }
 
-    .radio-img:hover {
-      opacity: 1;
-      transform: scale(1.1);
-    }
+    .radio-img:hover { opacity: 1; transform: scale(1.1); }
 
     @keyframes radio-scroll {
       0%   { transform: translateX(0); }
