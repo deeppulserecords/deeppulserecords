@@ -6,23 +6,10 @@
   <title>DeepPulse — Sound Ecosystems</title>
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2306080f'/%3E%3Crect x='4' y='4' width='24' height='24' rx='4' fill='none' stroke='%237eb8c9' stroke-width='0.5' opacity='0.4'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia,serif' font-size='17' font-weight='300' fill='%237eb8c9'%3ED%3C/text%3E%3C/svg%3E" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%2306080f'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia,serif' font-size='100' font-weight='300' fill='%237eb8c9'%3ED%3C/text%3E%3C/svg%3E" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="DeepPulse" />
   <meta property="og:title" content="DeepPulse — Sound Ecosystems" />
   <meta property="og:description" content="DeepPulse develops music catalogues and sound environments designed for sleep, focus and therapeutic spaces." />
-  <meta property="og:url" content="https://deeppulserecords.com" />
-  <meta property="og:image" content="https://deeppulserecords.com/og-image.png" />
-  <meta property="og:image:secure_url" content="https://deeppulserecords.com/og-image.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="DeepPulse — Sound Ecosystems" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="DeepPulse — Sound Ecosystems" />
-  <meta name="twitter:description" content="DeepPulse develops music catalogues and sound environments designed for sleep, focus and therapeutic spaces." />
-  <meta name="twitter:image" content="https://deeppulserecords.com/og-image.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,12 +18,14 @@
   <style>
     :root {
       --black: #06080f;
-      --border: rgba(255,255,255,0.07);
-      --border-light: rgba(255,255,255,0.12);
+      --bg-deep: #04050c;
+      --border: rgba(255,255,255,0.06);
+      --border-light: rgba(255,255,255,0.11);
       --text: #e8eaf2;
-      --text-dim: rgba(232,234,242,0.55);
-      --text-faint: rgba(232,234,242,0.28);
+      --text-dim: rgba(232,234,242,0.52);
+      --text-faint: rgba(232,234,242,0.26);
       --accent: #7eb8c9;
+      --accent-glow: rgba(126,184,201,0.12);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,112 +33,417 @@
 
     body {
       font-family: 'Jost', sans-serif;
-      background: var(--black);
+      background: var(--bg-deep);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      cursor: none;
     }
 
+    /* ── Custom cursor ── */
+    #cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, opacity 0.3s;
+      mix-blend-mode: screen;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(126,184,201,0.35);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+    }
+    body.hovering #cursor-ring {
+      width: 52px; height: 52px;
+      border-color: rgba(126,184,201,0.6);
+    }
+
+    /* ── Noise grain overlay ── */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 1000;
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1000;
       mix-blend-mode: overlay;
     }
 
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 32px 64px; background: linear-gradient(to bottom, rgba(6,8,15,0.97), transparent); }
-    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; color: var(--text); text-decoration: none; opacity: 0.9; }
-    .nav-links { display: flex; gap: 44px; list-style: none; }
-    .nav-links a { font-size: 9px; font-weight: 300; letter-spacing: 3.5px; text-transform: uppercase; color: var(--text-faint); text-decoration: none; transition: color 0.4s; }
-    .nav-links a:hover { color: var(--text-dim); }
-
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 48px 140px;
+    /* ── Ambient concentric rings — breathe slowly, no grid ── */
+    .ambient-rings {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      display: flex; align-items: center; justify-content: center;
       overflow: hidden;
     }
-    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 90% 80% at 50% 15%, rgba(18,32,78,0.9) 0%, transparent 58%), radial-gradient(ellipse 60% 50% at 15% 85%, rgba(12,32,65,0.5) 0%, transparent 55%), radial-gradient(ellipse 50% 60% at 85% 75%, rgba(8,26,55,0.4) 0%, transparent 55%), linear-gradient(180deg, #07091c 0%, #05070d 100%); }
-    .hero-orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; }
-    .hero-orb-1 { width: 700px; height: 700px; top: -220px; left: 50%; background: radial-gradient(circle, rgba(25,55,115,0.3) 0%, transparent 70%); animation: orb-center 9s ease-in-out infinite; }
-    .hero-orb-2 { width: 420px; height: 420px; bottom: 0; left: -120px; background: radial-gradient(circle, rgba(16,44,82,0.22) 0%, transparent 70%); animation: orb-float 11s ease-in-out infinite reverse; }
-    .hero-orb-3 { width: 360px; height: 360px; bottom: 80px; right: -90px; background: radial-gradient(circle, rgba(126,184,201,0.07) 0%, transparent 70%); animation: orb-float 13s ease-in-out infinite; }
-    @keyframes orb-center { 0%,100% { transform: translateX(-50%) scale(1); opacity:0.55; } 50% { transform: translateX(-50%) scale(1.1); opacity:0.9; } }
-    @keyframes orb-float { 0%,100% { transform: scale(1); opacity:0.55; } 50% { transform: scale(1.12) translateY(-14px); opacity:0.9; } }
+    .ambient-rings svg {
+      position: absolute;
+      width: 180vmax; height: 180vmax;
+      opacity: 0.38;
+    }
+    .ring {
+      fill: none;
+      stroke: rgba(126,184,201,0.09);
+      stroke-width: 0.5;
+      transform-origin: center;
+    }
+    .ring:nth-child(1)  { r: 18%; animation: ring-breathe 14s ease-in-out infinite; }
+    .ring:nth-child(2)  { r: 26%; animation: ring-breathe 17s ease-in-out infinite 1.5s; }
+    .ring:nth-child(3)  { r: 34%; animation: ring-breathe 20s ease-in-out infinite 3s; stroke: rgba(126,184,201,0.06); }
+    .ring:nth-child(4)  { r: 43%; animation: ring-breathe 23s ease-in-out infinite 1s; stroke: rgba(126,184,201,0.045); }
+    .ring:nth-child(5)  { r: 53%; animation: ring-breathe 26s ease-in-out infinite 2s; stroke: rgba(126,184,201,0.03); }
+    .ring:nth-child(6)  { r: 64%; animation: ring-breathe 30s ease-in-out infinite 0.5s; stroke: rgba(126,184,201,0.02); }
+    @keyframes ring-breathe {
+      0%,100% { transform: scale(1); opacity: 0.6; }
+      50%      { transform: scale(1.06); opacity: 1; }
+    }
 
-    .hero-content { position: relative; z-index: 2; max-width: 700px; }
-    .hero-eyebrow { font-size: 9px; letter-spacing: 7px; text-transform: uppercase; color: var(--accent); font-weight: 300; margin-bottom: 40px; opacity: 0; animation: fadeUp 1.2s ease forwards 0.3s; }
-    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(88px, 14vw, 156px); font-weight: 200; line-height: 0.86; letter-spacing: -4px; color: white; margin-bottom: 40px; opacity: 0; animation: fadeUp 1.2s ease forwards 0.5s; }
-    .hero-rule { width: 36px; height: 1px; background: linear-gradient(90deg, transparent, rgba(126,184,201,0.5), transparent); margin: 0 auto 36px; opacity: 0; animation: fadeUp 1.2s ease forwards 0.7s; }
-    .hero-desc { font-size: 14px; font-weight: 300; color: var(--text-faint); line-height: 2; max-width: 400px; margin: 0 auto; opacity: 0; letter-spacing: 0.3px; animation: fadeUp 1.2s ease forwards 0.9s; }
+    /* ── Floating particles ── */
+    .particles-canvas {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.55;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px 64px;
+      transition: padding 0.5s ease, background 0.5s ease, backdrop-filter 0.5s ease, border-color 0.5s ease;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      padding: 18px 64px;
+      background: rgba(4,5,12,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-color: var(--border);
+    }
+    .nav-links { display: flex; gap: 44px; list-style: none; }
+    .nav-links a {
+      font-size: 9px; font-weight: 300; letter-spacing: 3.5px;
+      text-transform: uppercase; color: var(--text-faint);
+      text-decoration: none; transition: color 0.4s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .nav-links a:hover { color: var(--text-dim); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 48px 140px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 85% 75% at 50% 10%, rgba(15,28,72,0.95) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 45% at 10% 90%, rgba(10,28,60,0.5) 0%, transparent 55%),
+        radial-gradient(ellipse 45% 55% at 90% 80%, rgba(6,22,48,0.4) 0%, transparent 55%),
+        linear-gradient(180deg, #08091e 0%, #04050c 100%);
+    }
+
+    /* Waveform */
+    .hero-waveform {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 220px; overflow: hidden; z-index: 1;
+      opacity: 0.18;
+    }
+    .hero-waveform svg { width: 100%; height: 100%; }
+    .wave-path {
+      fill: none; stroke: var(--accent); stroke-width: 1;
+      animation: wave-breathe 8s ease-in-out infinite;
+    }
+    .wave-path-2 {
+      fill: none; stroke: var(--accent); stroke-width: 0.5;
+      animation: wave-breathe 11s ease-in-out infinite reverse;
+      opacity: 0.5;
+    }
+    @keyframes wave-breathe {
+      0%,100% { d: path("M0,110 C150,60 300,155 450,100 C600,45 750,130 900,95 C1050,60 1200,130 1350,100 C1500,70 1650,120 1800,90 L1800,220 L0,220 Z"); }
+      50% { d: path("M0,95 C150,140 300,55 450,115 C600,170 750,65 900,110 C1050,155 1200,70 1350,120 C1500,165 1650,80 1800,110 L1800,220 L0,220 Z"); }
+    }
+
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; }
+    .hero-orb-1 { width: 800px; height: 800px; top: -280px; left: 50%; background: radial-gradient(circle, rgba(20,50,110,0.28) 0%, transparent 70%); animation: orb-center 10s ease-in-out infinite; }
+    .hero-orb-2 { width: 440px; height: 440px; bottom: 0; left: -140px; background: radial-gradient(circle, rgba(14,40,78,0.2) 0%, transparent 70%); animation: orb-float 12s ease-in-out infinite reverse; }
+    .hero-orb-3 { width: 380px; height: 380px; bottom: 80px; right: -100px; background: radial-gradient(circle, rgba(126,184,201,0.06) 0%, transparent 70%); animation: orb-float 14s ease-in-out infinite; }
+    @keyframes orb-center { 0%,100% { transform: translateX(-50%) scale(1); opacity:0.5; } 50% { transform: translateX(-50%) scale(1.08); opacity:0.85; } }
+    @keyframes orb-float { 0%,100% { transform: scale(1); opacity:0.5; } 50% { transform: scale(1.1) translateY(-16px); opacity:0.85; } }
+
+    .hero-content { position: relative; z-index: 2; max-width: 750px; }
+    .hero-eyebrow {
+      font-size: 9px; letter-spacing: 8px; text-transform: uppercase;
+      color: var(--accent); font-weight: 300; margin-bottom: 44px;
+      opacity: 0; animation: fadeUp 1.4s ease forwards 0.3s;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(96px, 15vw, 168px);
+      font-weight: 200; line-height: 0.84; letter-spacing: -6px;
+      color: white; margin-bottom: 44px;
+      opacity: 0; animation: fadeUp 1.4s ease forwards 0.5s;
+    }
+
+    .hero-rule {
+      width: 1px; height: 44px;
+      background: linear-gradient(180deg, rgba(126,184,201,0.5), transparent);
+      margin: 0 auto 36px;
+      opacity: 0; animation: fadeUp 1.4s ease forwards 0.7s;
+    }
+    .hero-desc {
+      font-size: 13px; font-weight: 300; color: var(--text-faint);
+      line-height: 2.1; max-width: 380px; margin: 0 auto;
+      letter-spacing: 0.4px;
+      opacity: 0; animation: fadeUp 1.4s ease forwards 0.9s;
+    }
 
     .hero-scroll {
-      position: absolute;
-      bottom: 44px;
-      left: 0;
-      right: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      z-index: 2;
-      opacity: 0;
-      animation: fadeUp 1.2s ease forwards 1.4s;
+      position: absolute; bottom: 44px; left: 0; right: 0;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      z-index: 2; opacity: 0; animation: fadeUp 1.4s ease forwards 1.5s;
     }
-    .hero-scroll span {
-      font-size: 8px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--text-faint);
-      opacity: 0.6;
-    }
+    .hero-scroll span { font-size: 8px; letter-spacing: 5px; text-transform: uppercase; color: var(--text-faint); opacity: 0.5; }
     .scroll-line {
-      width: 1px;
-      height: 36px;
-      background: linear-gradient(to bottom, rgba(126,184,201,0.3), transparent);
-      animation: scroll-pulse 3s ease-in-out infinite;
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(126,184,201,0.35), transparent);
+      animation: scroll-pulse 2.8s ease-in-out infinite;
     }
-    @keyframes scroll-pulse { 0%,100% { opacity:0.2; } 50% { opacity:0.8; } }
+    @keyframes scroll-pulse { 0%,100% { opacity:0.15; transform: scaleY(1); } 50% { opacity:1; transform: scaleY(1.15); } }
 
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 88px 64px; }
-    .eyebrow { font-size: 9px; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); font-weight: 300; margin-bottom: 20px; opacity: 0.7; }
-    .sec-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4.5vw, 58px); font-weight: 300; line-height: 1.02; letter-spacing: -1.5px; color: white; margin-bottom: 22px; }
-    .sec-desc { font-size: 14px; font-weight: 300; color: var(--text-dim); line-height: 2; max-width: 520px; margin-bottom: 56px; letter-spacing: 0.2px; }
-    .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
+    /* ── Sections ── */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 96px 64px; position: relative; z-index: 1; }
+    .eyebrow { font-size: 9px; letter-spacing: 6px; text-transform: uppercase; color: var(--accent); font-weight: 300; margin-bottom: 18px; opacity: 0.65; }
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 4.8vw, 62px);
+      font-weight: 300; line-height: 1; letter-spacing: -2px;
+      color: white; margin-bottom: 22px;
+    }
+    .sec-desc { font-size: 13px; font-weight: 300; color: var(--text-dim); line-height: 2.1; max-width: 500px; margin-bottom: 60px; letter-spacing: 0.3px; }
 
-    .cat-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
-    .cat-stats { display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
-    .stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 20px 36px; background: linear-gradient(145deg, rgba(14,22,58,0.35), rgba(5,7,18,0.65)); gap: 20px; transition: background 0.3s; }
-    .stat-row:hover { background: linear-gradient(145deg, rgba(18,28,70,0.45), rgba(8,10,25,0.7)); }
-    .stat-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-faint); font-weight: 300; flex-shrink: 0; opacity: 0.8; }
-    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 300; color: rgba(232,234,242,0.6); text-align: right; letter-spacing: -0.2px; }
-    .cat-text { background: linear-gradient(145deg, rgba(14,22,58,0.35), rgba(5,7,18,0.65)); padding: 44px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); position: relative; z-index: 1; }
 
-    .stat-row-link { display: flex; justify-content: space-between; align-items: center; padding: 20px 36px; background: linear-gradient(145deg, rgba(14,22,58,0.35), rgba(5,7,18,0.65)); gap: 20px; transition: background 0.3s; cursor: pointer; text-decoration: none; }
-    .stat-row-link:hover { background: linear-gradient(145deg, rgba(18,28,70,0.55), rgba(8,10,25,0.8)); }
-    .stat-row-link:hover .stat-row-arrow { gap: 14px; opacity: 1; }
-    .stat-row-arrow { display: inline-flex; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 300; opacity: 0.55; transition: gap 0.3s, opacity 0.3s; white-space: nowrap; }
-    .stat-row-arrow::after { content: '→'; font-size: 12px; }
+    /* Reveal animation */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
 
-    .radio-row { flex-direction: column; align-items: flex-start; gap: 14px; padding: 24px 36px; overflow: hidden; }
-    .radio-track-wrap { width: 100%; overflow: hidden; mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); }
-    .radio-track { display: flex; gap: 10px; animation: radio-scroll 20s linear infinite; width: max-content; }
-    .radio-track:hover { animation-play-state: paused; }
-    .radio-img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; opacity: 0.65; transition: opacity 0.3s, transform 0.3s; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08); }
-    .radio-img:hover { opacity: 1; transform: scale(1.1); }
-    @keyframes radio-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    /* ── Catalogue — editorial index layout ── */
+    .cat-meta {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 1px; overflow: hidden;
+    }
+    .cat-meta-cell {
+      background: linear-gradient(145deg, rgba(12,20,54,0.3), rgba(4,6,16,0.6));
+      padding: 18px 36px;
+      display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+    }
+    .stat-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-faint); font-weight: 300; opacity: 0.8; flex-shrink: 0; }
+    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 300; color: rgba(232,234,242,0.5); text-align: right; letter-spacing: -0.2px; }
 
+    /* ── Radio Placements — premium editorial block ── */
+    .radio-section {
+      margin-top: 1px;
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      background: linear-gradient(160deg, rgba(8,14,44,0.5), rgba(4,6,16,0.7));
+      position: relative;
+    }
+    .radio-section::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.18), transparent);
+    }
+    .radio-section-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 36px 44px 28px; gap: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .radio-section-eyebrow {
+      font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--accent); font-weight: 300; opacity: 0.65; margin-bottom: 10px;
+    }
+    .radio-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px; font-weight: 300; color: white;
+      letter-spacing: -1px; line-height: 1; margin-bottom: 12px;
+    }
+    .radio-section-sub {
+      font-size: 11px; font-weight: 300; color: var(--text-faint);
+      letter-spacing: 0.3px; line-height: 1.8; max-width: 340px;
+    }
+    .radio-section-count {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 4px; flex-shrink: 0; padding-top: 4px;
+    }
+    .radio-count-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 64px; font-weight: 200; line-height: 1; letter-spacing: -4px;
+      color: rgba(126,184,201,0.18);
+    }
+    .radio-count-label {
+      font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--accent); font-weight: 300; text-align: right; line-height: 1.8;
+      opacity: 0.55;
+    }
+
+    /* Station rows */
+    .radio-stations { display: flex; flex-direction: column; }
+    .radio-station-item {
+      display: grid; grid-template-columns: 52px 56px 1fr auto;
+      align-items: center; gap: 20px;
+      padding: 0 44px; min-height: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.35s; position: relative; overflow: hidden;
+    }
+    .radio-station-item:last-child { border-bottom: none; }
+    .radio-station-item:hover { background: rgba(126,184,201,0.03); }
+    .radio-station-item:hover .radio-station-pulse { opacity: 1; }
+    .radio-station-item:hover .radio-station-img { opacity: 0.9; transform: scale(1.06); }
+    .radio-station-item:hover .radio-station-name { color: white; }
+
+    /* Pulse ring */
+    .radio-station-pulse {
+      position: absolute; left: 44px; top: 50%; transform: translateY(-50%);
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 1px solid rgba(126,184,201,0.15);
+      opacity: 0; transition: opacity 0.4s;
+      animation: station-pulse 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes station-pulse {
+      0%,100% { transform: translateY(-50%) scale(0.85); opacity: 0; }
+      50%      { transform: translateY(-50%) scale(1.15); opacity: 0.4; }
+    }
+
+    .radio-station-img-wrap {
+      width: 52px; height: 52px; border-radius: 8px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .radio-station-img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.6; transition: opacity 0.35s, transform 0.35s;
+    }
+    .radio-station-info {
+      display: flex; flex-direction: column; gap: 4px; position: relative; z-index: 1;
+    }
+    .radio-station-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; font-weight: 300; color: rgba(232,234,242,0.8);
+      letter-spacing: -0.3px; transition: color 0.3s; line-height: 1;
+    }
+    .radio-station-platform {
+      font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text-faint); font-weight: 300;
+    }
+    .radio-station-live {
+      display: flex; align-items: center; gap: 7px;
+      position: relative; z-index: 1;
+    }
+    .radio-live-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(126,184,201,0.7);
+      animation: live-blink 2.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes live-blink {
+      0%,100% { opacity: 0.3; transform: scale(0.8); }
+      50%      { opacity: 1; transform: scale(1.2); }
+    }
+    .radio-live-text {
+      font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(126,184,201,0.5); font-weight: 300;
+    }
+    /* stagger pulse delays */
+    .radio-station-item:nth-child(1) .radio-live-dot { animation-delay: 0s; }
+    .radio-station-item:nth-child(2) .radio-live-dot { animation-delay: 0.5s; }
+    .radio-station-item:nth-child(3) .radio-live-dot { animation-delay: 1s; }
+    .radio-station-item:nth-child(4) .radio-live-dot { animation-delay: 1.5s; }
+    .radio-station-item:nth-child(5) .radio-live-dot { animation-delay: 2s; }
+
+    /* Artist index table */
+    .cat-index {
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .cat-index-header {
+      display: grid; grid-template-columns: 48px 1fr auto;
+      padding: 12px 36px; gap: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(4,6,16,0.5);
+    }
+    .cat-index-header span {
+      font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text-faint); font-weight: 300; opacity: 0.5;
+    }
+    .cat-index-header span:last-child { text-align: right; }
+
+    .cat-artist-row {
+      display: grid; grid-template-columns: 48px 1fr auto;
+      align-items: center; padding: 0 36px; gap: 20px;
+      background: linear-gradient(145deg, rgba(10,17,48,0.25), rgba(4,6,16,0.55));
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      text-decoration: none; position: relative; overflow: hidden;
+      transition: background 0.35s;
+      min-height: 60px;
+    }
+    .cat-artist-row:last-child { border-bottom: none; }
+    .cat-artist-row::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.04) 50%, transparent);
+      transform: translateX(-100%); transition: transform 0.6s ease;
+    }
+    .cat-artist-row:hover::before { transform: translateX(100%); }
+    .cat-artist-row:hover { background: linear-gradient(145deg, rgba(14,24,60,0.4), rgba(6,9,22,0.7)); }
+    .cat-artist-row:hover .cat-artist-name { color: white; }
+    .cat-artist-row:hover .cat-artist-platforms { opacity: 1; gap: 14px; }
+
+    .cat-artist-index {
+      font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 300;
+      color: var(--text-faint); opacity: 0.45; letter-spacing: 0; line-height: 1;
+      user-select: none;
+    }
+    .cat-artist-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300;
+      color: rgba(232,234,242,0.8); letter-spacing: -0.4px;
+      transition: color 0.3s; line-height: 1;
+    }
+    .cat-artist-platforms {
+      display: flex; align-items: center; gap: 10px;
+      opacity: 0.4; transition: opacity 0.35s, gap 0.35s;
+    }
+    .cat-platform-tag {
+      font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); font-weight: 300; white-space: nowrap;
+    }
+    .cat-platform-tag.inactive { color: var(--text-faint); }
+    .cat-platform-tag + .cat-platform-tag::before {
+      content: '·'; margin-right: 10px; color: rgba(255,255,255,0.12); font-size: 10px;
+    }
+
+    /* ── Environments ── */
     .env-wrap { text-align: center; }
-    .env-wrap .sec-desc { margin-left: auto; margin-right: auto; max-width: 560px; }
-    .env-list { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .env-wrap .sec-desc { margin-left: auto; margin-right: auto; max-width: 540px; }
+    .env-list { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
 
     @keyframes light-sweep {
       0%   { background-position: 200% center; }
@@ -157,88 +451,394 @@
       100% { background-position: -100% center; }
     }
 
-    .env-item { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px, 3.2vw, 36px); font-weight: 200; letter-spacing: -0.5px; padding: 0 32px; position: relative; background: linear-gradient(105deg, rgba(232,234,242,0.3) 0%, rgba(232,234,242,0.3) 25%, rgba(255,255,255,1) 50%, rgba(232,234,242,0.3) 75%, rgba(232,234,242,0.3) 100%); background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: light-sweep 5s ease-in-out infinite; }
+    .env-item {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(26px, 3.4vw, 40px);
+      font-weight: 200; letter-spacing: -0.5px;
+      padding: 6px 36px; position: relative;
+      background: linear-gradient(105deg, rgba(232,234,242,0.28) 0%, rgba(232,234,242,0.28) 25%, rgba(255,255,255,1) 50%, rgba(232,234,242,0.28) 75%, rgba(232,234,242,0.28) 100%);
+      background-size: 300% 100%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: light-sweep 5.5s ease-in-out infinite;
+      transition: letter-spacing 0.4s;
+    }
+    .env-item:hover { letter-spacing: 1px; }
     .env-item:nth-child(1) { animation-delay: 0s; }
-    .env-item:nth-child(2) { animation-delay: 0.9s; }
-    .env-item:nth-child(3) { animation-delay: 1.8s; }
-    .env-item:nth-child(4) { animation-delay: 2.7s; }
-    .env-item::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 14px; background: rgba(255,255,255,0.1); }
+    .env-item:nth-child(2) { animation-delay: 1s; }
+    .env-item:nth-child(3) { animation-delay: 2s; }
+    .env-item:nth-child(4) { animation-delay: 3s; }
+    .env-item::after {
+      content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      width: 1px; height: 16px; background: rgba(255,255,255,0.08);
+    }
     .env-item:last-child::after { display: none; }
 
-    .curated-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
-    .curated-card { background: linear-gradient(150deg, rgba(14,22,58,0.5) 0%, rgba(6,9,24,0.6) 100%); padding: 32px 28px; display: flex; flex-direction: column; gap: 14px; transition: background 0.4s; position: relative; text-decoration: none; }
-    .curated-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(126,184,201,0.12), transparent); }
-    .curated-card:hover { background: linear-gradient(150deg, rgba(18,28,72,0.7) 0%, rgba(8,12,30,0.8) 100%); }
-    .curated-card:hover .curated-img { opacity: 1; transform: scale(1.04); }
-    .curated-card:hover .curated-platform { opacity: 1; }
-    .curated-img { width: 68px; height: 68px; border-radius: 8px; object-fit: cover; opacity: 0.8; border: 1px solid rgba(255,255,255,0.08); transition: opacity 0.3s, transform 0.3s; }
-    .curated-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: white; letter-spacing: -0.3px; line-height: 1.1; }
-    .curated-desc { font-size: 11px; font-weight: 300; color: var(--text-faint); letter-spacing: 0.3px; line-height: 1.7; }
-    .curated-platform { font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); font-weight: 300; opacity: 0.55; margin-top: auto; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.3s; }
-    .curated-platform::after { content: '↗'; font-size: 11px; }
+    /* ── Curated — horizontal tracklist ── */
+    .curated-list {
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .curated-list-header {
+      display: grid; grid-template-columns: 56px 1fr 1fr auto;
+      padding: 12px 36px; gap: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(4,6,16,0.5);
+    }
+    .curated-list-header span {
+      font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text-faint); font-weight: 300; opacity: 0.5;
+    }
+    .curated-list-header span:last-child { text-align: right; }
 
-    .nv-wrap { text-align: center; }
-    .nv-wrap .sec-desc { margin-left: auto; margin-right: auto; }
-    .nv-line { width: 1px; height: 64px; background: linear-gradient(to bottom, rgba(126,184,201,0.3), transparent); margin: 0 auto 44px; }
-    .btn-accent { padding: 15px 36px; border: 1px solid rgba(126,184,201,0.2); background: rgba(126,184,201,0.04); color: rgba(126,184,201,0.8); font-family: 'Jost', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.4s ease; }
-    .btn-accent:hover { background: rgba(126,184,201,0.09); border-color: rgba(126,184,201,0.4); color: var(--accent); }
+    .curated-row {
+      display: grid; grid-template-columns: 56px 1fr 1fr auto;
+      align-items: center; padding: 0 36px; gap: 24px;
+      background: linear-gradient(145deg, rgba(10,17,48,0.25), rgba(4,6,16,0.55));
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      text-decoration: none; position: relative; overflow: hidden;
+      transition: background 0.4s; min-height: 76px;
+    }
+    .curated-row:last-child { border-bottom: none; }
+    /* light sweep left→right */
+    .curated-row::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.045) 50%, transparent);
+      transform: translateX(-100%); transition: transform 0.65s ease;
+    }
+    /* left accent bar */
+    .curated-row::after {
+      content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .curated-row:hover::before { transform: translateX(100%); }
+    .curated-row:hover::after { opacity: 0.5; }
+    .curated-row:hover { background: linear-gradient(145deg, rgba(14,24,60,0.42), rgba(6,9,22,0.72)); }
+    .curated-row:hover .curated-img { opacity: 1; transform: scale(1.06); }
+    .curated-row:hover .curated-row-cta { opacity: 1; gap: 12px; }
+    .curated-row:hover .curated-row-name { color: white; }
 
-    .footer-inner { max-width: 1100px; margin: 0 auto; padding: 48px 64px 60px; display: flex; align-items: flex-start; justify-content: space-between; }
-    .footer-brand { display: flex; flex-direction: column; gap: 9px; }
-    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 300; letter-spacing: 3px; color: rgba(232,234,242,0.7); }
-    .footer-tagline { font-size: 11px; color: var(--text-faint); font-weight: 300; letter-spacing: 0.3px; opacity: 0.7; }
-    .footer-nav { display: flex; gap: 36px; list-style: none; padding-top: 4px; }
-    .footer-nav a { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-faint); text-decoration: none; font-weight: 300; transition: color 0.3s; opacity: 0.7; }
-    .footer-nav a:hover { color: var(--text-dim); opacity: 1; }
-    .footer-copy { font-size: 9px; color: var(--text-faint); letter-spacing: 2px; font-weight: 300; opacity: 0.5; padding-top: 4px; }
+    .curated-img {
+      width: 44px; height: 44px; border-radius: 6px; object-fit: cover;
+      opacity: 0.65; border: 1px solid rgba(255,255,255,0.08);
+      transition: opacity 0.4s, transform 0.4s; position: relative; z-index: 1;
+    }
+    .curated-row-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300;
+      color: rgba(232,234,242,0.85); letter-spacing: -0.5px; line-height: 1;
+      transition: color 0.3s; position: relative; z-index: 1;
+    }
+    .curated-row-desc {
+      font-size: 11px; font-weight: 300; color: var(--text-faint);
+      letter-spacing: 0.3px; line-height: 1.6;
+      position: relative; z-index: 1;
+    }
+    .curated-row-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--accent); font-weight: 300; opacity: 0.45;
+      transition: opacity 0.35s, gap 0.35s; white-space: nowrap;
+      position: relative; z-index: 1;
+    }
+    .curated-row-cta::after { content: '↗'; font-size: 11px; }
 
-    .modal-overlay { position: fixed; inset: 0; background: rgba(3,5,12,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+    /* ── Artist Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(2,3,10,0.92);
+      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+      z-index: 500; display: flex; align-items: center; justify-content: center;
+      padding: 24px; opacity: 0; pointer-events: none;
+      transition: opacity 0.45s ease;
+    }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
-    .modal { background: linear-gradient(160deg, rgba(14,22,62,0.97) 0%, rgba(6,9,24,0.99) 100%); border: 1px solid rgba(255,255,255,0.09); max-width: 620px; width: 100%; max-height: 85vh; overflow-y: auto; position: relative; transform: translateY(24px); transition: transform 0.4s ease; }
-    .modal-overlay.open .modal { transform: translateY(0); }
-    .modal::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(126,184,201,0.25), transparent); }
-    .modal-header { padding: 44px 44px 28px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
-    .modal-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); font-weight: 300; margin-bottom: 12px; opacity: 0.7; }
-    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; color: white; letter-spacing: -0.5px; line-height: 1.1; }
-    .modal-close { background: none; border: 1px solid rgba(255,255,255,0.08); color: var(--text-faint); width: 30px; height: 30px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
-    .modal-close:hover { border-color: rgba(255,255,255,0.18); color: var(--text-dim); }
-    .modal-body { padding: 0 44px 44px; }
-    .modal-artist { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05); gap: 16px; transition: opacity 0.2s; }
-    .modal-artist:hover { opacity: 0.85; }
+    .modal {
+      background: linear-gradient(160deg, rgba(10,18,56,0.98) 0%, rgba(4,6,20,0.99) 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto;
+      position: relative;
+      transform: translateY(32px) scale(0.97);
+      transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.35), transparent);
+    }
+    .modal-header {
+      padding: 40px 44px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
+    }
+    .modal-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); font-weight: 300; margin-bottom: 10px; opacity: 0.65; }
+    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; color: white; letter-spacing: -0.5px; }
+    .modal-close {
+      background: none; border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-faint); width: 32px; height: 32px;
+      font-size: 13px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.25s; cursor: none;
+    }
+    .modal-close:hover { border-color: rgba(255,255,255,0.2); color: var(--text-dim); }
+    .modal-body { padding: 0 44px 40px; }
+    .modal-artist {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+      gap: 16px; transition: opacity 0.2s;
+    }
+    .modal-artist:hover { opacity: 0.82; }
     .modal-artist:last-child { border-bottom: none; }
-    .modal-artist-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: rgba(232,234,242,0.85); letter-spacing: -0.3px; }
+    .modal-artist-name { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 300; color: rgba(232,234,242,0.82); letter-spacing: -0.3px; }
     .modal-platforms { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
-    .modal-platform { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-faint); border: 1px solid rgba(255,255,255,0.07); padding: 5px 10px; text-decoration: none; font-weight: 300; transition: color 0.2s, border-color 0.2s; }
+    .modal-platform {
+      font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-faint); border: 1px solid rgba(255,255,255,0.07);
+      padding: 5px 10px; text-decoration: none; font-weight: 300;
+      transition: color 0.2s, border-color 0.2s; cursor: none;
+    }
     .modal-platform:hover { color: var(--accent); border-color: rgba(126,184,201,0.25); }
     .modal-platform.active { color: rgba(126,184,201,0.8); border-color: rgba(126,184,201,0.2); }
 
-    @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    /* ── Catalogue view-artists trigger ── */
+    .cat-view-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 36px; margin-top: 1px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(145deg, rgba(12,20,54,0.3), rgba(4,6,16,0.6));
+      cursor: none; transition: background 0.35s; position: relative; overflow: hidden;
+    }
+    .cat-view-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.04) 50%, transparent);
+      transform: translateX(-100%); transition: transform 0.6s ease;
+    }
+    .cat-view-btn:hover::before { transform: translateX(100%); }
+    .cat-view-btn:hover { background: linear-gradient(145deg, rgba(16,26,66,0.5), rgba(6,9,22,0.75)); }
+    .cat-view-btn:hover .cat-view-arrow { gap: 16px; opacity: 1; }
+    .cat-view-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-faint); font-weight: 300; opacity: 0.8; }
+    .cat-view-arrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); font-weight: 300; opacity: 0.55;
+      transition: gap 0.3s, opacity 0.3s;
+    }
+    .cat-view-arrow::after { content: '→'; font-size: 12px; }
 
-    @media (max-width: 768px) {
-      nav { padding: 24px 28px; }
-      .nav-links { display: none; }
+    /* ── Curated flip cards ── */
+    .curated-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .flip-card {
+      height: 320px; perspective: 1000px;
+      text-decoration: none;
+    }
+    .flip-card-inner {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.75s cubic-bezier(0.4,0.2,0.2,1);
+    }
+    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back {
+      position: absolute; inset: 0;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    /* Front */
+    .flip-card-front {
+      background: linear-gradient(160deg, rgba(10,18,54,0.6), rgba(4,6,18,0.8));
+      display: flex; flex-direction: column;
+    }
+    .flip-card-front-img {
+      flex: 1; overflow: hidden; position: relative;
+    }
+    .flip-card-front-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.7; transition: transform 0.75s ease;
+      display: block;
+    }
+    .flip-card:hover .flip-card-front-img img { transform: scale(1.04); }
+    .flip-card-front-img::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(4,6,18,0.85) 0%, transparent 50%);
+    }
+    .flip-card-front-foot {
+      padding: 20px 22px 18px;
+      position: relative;
+    }
+    .flip-card-front-foot::before {
+      content: ''; position: absolute; top: 0; left: 22px; right: 22px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.15), transparent);
+    }
+    .flip-card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 300; color: white; letter-spacing: -0.4px; line-height: 1;
+      margin-bottom: 6px;
+    }
+    .flip-card-hint {
+      font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--text-faint); font-weight: 300; opacity: 0.5;
+    }
+    /* Back */
+    .flip-card-back {
+      background: linear-gradient(160deg, rgba(8,16,48,0.97), rgba(4,6,18,0.99));
+      transform: rotateY(180deg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 20px; padding: 32px;
+      text-align: center;
+    }
+    .flip-card-back::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.3), transparent);
+    }
+    .flip-card-back-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 300; color: white; letter-spacing: -0.6px;
+    }
+    .flip-card-back-desc {
+      font-size: 11px; font-weight: 300; color: var(--text-faint);
+      letter-spacing: 0.4px; line-height: 1.8; max-width: 200px;
+    }
+    .flip-card-back-platform {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px;
+      border: 1px solid rgba(126,184,201,0.22);
+      background: rgba(126,184,201,0.05);
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--accent); font-weight: 300;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .flip-card-back-platform::after { content: '↗'; font-size: 11px; }
+
+    /* ── Contact strip ── */
+    .contact-strip {
+      max-width: 1100px; margin: 0 auto; padding: 0 64px 96px;
+      position: relative; z-index: 1;
+    }
+    .contact-inner {
+      border: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(135deg, rgba(12,20,54,0.25), rgba(4,6,16,0.5));
+      padding: 52px 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; overflow: hidden;
+    }
+    .contact-inner::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.2), transparent);
+    }
+    .contact-inner::after {
+      content: ''; position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(126,184,201,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-text h3 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: white; letter-spacing: -1px; margin-bottom: 8px; }
+    .contact-text p { font-size: 12px; font-weight: 300; color: var(--text-faint); letter-spacing: 0.3px; }
+    .btn-accent {
+      padding: 15px 38px;
+      border: 1px solid rgba(126,184,201,0.2);
+      background: rgba(126,184,201,0.04);
+      color: rgba(126,184,201,0.75);
+      font-family: 'Jost', sans-serif; font-size: 9px; font-weight: 300;
+      letter-spacing: 4px; text-transform: uppercase;
+      text-decoration: none; cursor: none;
+      transition: all 0.4s ease; position: relative; overflow: hidden;
+    }
+    .btn-accent::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(126,184,201,0.06), transparent);
+      transform: translateX(-100%); transition: transform 0.6s ease;
+    }
+    .btn-accent:hover::before { transform: translateX(100%); }
+    .btn-accent:hover { background: rgba(126,184,201,0.09); border-color: rgba(126,184,201,0.38); color: var(--accent); }
+
+    /* ── Footer ── */
+    footer { position: relative; z-index: 1; }
+    .footer-divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 30%, rgba(126,184,201,0.12) 50%, rgba(255,255,255,0.07) 70%, transparent);
+      position: relative;
+    }
+    .footer-divider::after {
+      content: '◆'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+      font-size: 7px; color: rgba(126,184,201,0.4);
+      background: var(--bg-deep); padding: 0 12px;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      padding: 52px 64px 64px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 9px; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 300; letter-spacing: 4px; color: rgba(232,234,242,0.65); }
+    .footer-tagline { font-size: 11px; color: var(--text-faint); font-weight: 300; letter-spacing: 0.4px; opacity: 0.65; max-width: 220px; line-height: 1.7; }
+    .footer-nav { display: flex; gap: 36px; list-style: none; padding-top: 4px; }
+    .footer-nav a { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-faint); text-decoration: none; font-weight: 300; transition: color 0.3s; opacity: 0.65; }
+    .footer-nav a:hover { color: var(--text-dim); opacity: 1; }
+    .footer-copy { font-size: 9px; color: var(--text-faint); letter-spacing: 2px; font-weight: 300; opacity: 0.4; padding-top: 4px; }
+
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+    @media (max-width: 900px) {
+      nav { display: none; }
       .wrap { padding: 72px 28px; }
-      .cat-layout { grid-template-columns: 1fr; }
-      .curated-grid { grid-template-columns: 1fr; }
+      .cat-meta { grid-template-columns: 1fr; }
+      .cat-meta-cell { padding: 14px 20px; }
+      .cat-view-btn { padding: 16px 20px; }
+      .radio-section-header { flex-direction: column; gap: 16px; padding: 28px 24px 20px; }
+      .radio-section-count { flex-direction: row; align-items: center; gap: 12px; }
+      .radio-count-num { font-size: 44px; }
+      .radio-station-item { grid-template-columns: 44px 1fr auto; gap: 14px; padding: 0 24px; min-height: 58px; }
+      .radio-station-pulse { left: 24px; }
+      .radio-station-img-wrap { width: 44px; height: 44px; }
+      .radio-station-name { font-size: 17px; }
+      .curated-cards { grid-template-columns: 1fr; gap: 12px; }
+      .flip-card { height: 260px; }
       .footer-inner { flex-direction: column; gap: 32px; padding: 44px 28px; }
       .footer-nav { justify-content: flex-start; }
+      .env-item { padding: 6px 18px; }
+      .contact-strip { padding: 0 28px 72px; }
+      .contact-inner { flex-direction: column; gap: 28px; padding: 36px 28px; }
       .modal-header { padding: 28px 24px 20px; }
       .modal-body { padding: 0 24px 32px; }
-      .modal-artist { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .modal-artist { flex-direction: column; align-items: flex-start; gap: 10px; }
       .modal-platforms { justify-content: flex-start; }
-      .env-item { padding: 8px 18px; }
+      body { cursor: auto; }
+      #cursor, #cursor-ring { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <a href="#" class="nav-logo">DeepPulse</a>
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Ambient rings -->
+  <div class="ambient-rings">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+      <circle class="ring" cx="50" cy="50" r="18"/>
+      <circle class="ring" cx="50" cy="50" r="26"/>
+      <circle class="ring" cx="50" cy="50" r="34"/>
+      <circle class="ring" cx="50" cy="50" r="43"/>
+      <circle class="ring" cx="50" cy="50" r="53"/>
+      <circle class="ring" cx="50" cy="50" r="64"/>
+    </svg>
+  </div>
+
+  <!-- Floating particles -->
+  <canvas class="particles-canvas" id="particles"></canvas>
+
+  <nav id="mainNav">
     <ul class="nav-links">
       <li><a href="#ecosystem">About</a></li>
       <li><a href="#catalogue">Catalogue</a></li>
       <li><a href="#environments">Environments</a></li>
-      <li><a href="#northvale">North Vale</a></li>
+      <li><a href="#curated">Listening</a></li>
+      <li><a href="https://instagram.com/deeppulserecords" target="_blank" rel="noopener noreferrer">Instagram</a></li>
     </ul>
   </nav>
 
@@ -247,8 +847,17 @@
     <div class="hero-orb hero-orb-1"></div>
     <div class="hero-orb hero-orb-2"></div>
     <div class="hero-orb hero-orb-3"></div>
+
+    <!-- Waveform -->
+    <div class="hero-waveform">
+      <svg viewBox="0 0 1800 220" preserveAspectRatio="none">
+        <path class="wave-path" d="M0,110 C150,60 300,155 450,100 C600,45 750,130 900,95 C1050,60 1200,130 1350,100 C1500,70 1650,120 1800,90 L1800,220 L0,220 Z"/>
+        <path class="wave-path-2" d="M0,130 C200,80 350,170 500,120 C650,70 800,150 950,110 C1100,70 1250,145 1400,115 C1550,85 1700,130 1800,105 L1800,220 L0,220 Z"/>
+      </svg>
+    </div>
+
     <div class="hero-content">
-      <p class="hero-eyebrow">Sound Ecosystems</p>
+      <p class="hero-eyebrow">Welcome</p>
       <h1 class="hero-title">DeepPulse</h1>
       <div class="hero-rule"></div>
       <p class="hero-desc">Independent label developing curated releases for sleep, meditation and ambient listening.</p>
@@ -261,7 +870,7 @@
 
   <div class="divider"></div>
 
-  <div class="wrap" id="ecosystem">
+  <div class="wrap reveal" id="ecosystem">
     <p class="eyebrow">The Label</p>
     <h2 class="sec-title">About</h2>
     <p class="sec-desc">DeepPulse is an independent label focused on sleep, meditation and ambient listening. The label develops curated releases designed for continuous listening across streaming platforms and editorial playlists.</p>
@@ -270,62 +879,128 @@
   <div class="divider"></div>
 
   <div class="wrap" id="catalogue">
-    <p class="eyebrow">Overview</p>
-    <h2 class="sec-title">Catalogue Overview</h2>
-    <p class="sec-desc">DeepPulse Records</p>
-    <div class="cat-layout">
-      <div class="cat-stats">
-        <a href="#" class="stat-row-link" onclick="openCatalogue(event)">
-          <span class="stat-label">Selected Catalogue Projects</span>
-          <span class="stat-row-arrow">View Artists</span>
-        </a>
-        <div class="stat-row">
-          <span class="stat-label">Focus</span>
-          <span class="stat-value">Sleep / Ambient / Wellness</span>
+    <p class="eyebrow reveal">Overview</p>
+    <h2 class="sec-title reveal reveal-delay-1">Catalogue Overview</h2>
+    <p class="sec-desc reveal reveal-delay-2">DeepPulse Records</p>
+
+    <!-- Meta stats grid -->
+    <div class="cat-meta reveal reveal-delay-3">
+      <div class="cat-meta-cell">
+        <span class="stat-label">Focus</span>
+        <span class="stat-value">Sleep · Ambient · Wellness</span>
+      </div>
+      <div class="cat-meta-cell">
+        <span class="stat-label">Release Strategy</span>
+        <span class="stat-value">Continuous Releases</span>
+      </div>
+      <div class="cat-meta-cell">
+        <span class="stat-label">Streaming Platforms</span>
+        <span class="stat-value">Spotify · Pandora · Apple · Amazon</span>
+      </div>
+      <div class="cat-meta-cell">
+        <span class="stat-label">Since</span>
+        <span class="stat-value">2025</span>
+      </div>
+    </div>
+
+    <!-- Radio placements — premium editorial block -->
+    <div class="radio-section reveal">
+      <div class="radio-section-header">
+        <div class="radio-section-left">
+          <p class="radio-section-eyebrow">Editorial Placements</p>
+          <p class="radio-section-sub">DeepPulse artists featured across curated radio stations and playlists on global streaming platforms.</p>
         </div>
-        <div class="stat-row">
-          <span class="stat-label">Release Strategy</span>
-          <span class="stat-value">Continuous Releases</span>
+        <div class="radio-section-count">
+          <span class="radio-count-label">Active<br>Stations</span>
         </div>
-        <div class="stat-row">
-          <span class="stat-label">Streaming Platforms</span>
-          <span class="stat-value">Spotify · Pandora · Apple · Amazon</span>
+      </div>
+      <div class="radio-stations">
+        <div class="radio-station-item">
+          <div class="radio-station-pulse"></div>
+          <div class="radio-station-img-wrap">
+            <img src="radio-ambient.png" alt="Ambient" class="radio-station-img" />
+          </div>
+          <div class="radio-station-info">
+            <span class="radio-station-name">Ambient</span>
+            <span class="radio-station-platform">Pandora Radio</span>
+          </div>
+          <div class="radio-station-live">
+            <span class="radio-live-dot"></span>
+            <span class="radio-live-text">Live</span>
+          </div>
         </div>
-        <div class="stat-row">
-          <span class="stat-label">Since</span>
-          <span class="stat-value">2025</span>
+        <div class="radio-station-item">
+          <div class="radio-station-pulse"></div>
+          <div class="radio-station-img-wrap">
+            <img src="radio-spa.png" alt="SPA" class="radio-station-img" />
+          </div>
+          <div class="radio-station-info">
+            <span class="radio-station-name">SPA</span>
+            <span class="radio-station-platform">Pandora Radio</span>
+          </div>
+          <div class="radio-station-live">
+            <span class="radio-live-dot"></span>
+            <span class="radio-live-text">Live</span>
+          </div>
         </div>
-        <div class="stat-row radio-row">
-          <span class="stat-label">Radio Placements</span>
-          <div class="radio-track-wrap">
-            <div class="radio-track">
-              <img src="radio-ambient.png" alt="Ambient" class="radio-img" />
-              <img src="radio-spa.png" alt="SPA" class="radio-img" />
-              <img src="radio-calm-spa.png" alt="Calm SPA" class="radio-img" />
-              <img src="radio-piano.png" alt="Piano" class="radio-img" />
-              <img src="radio-new-age-now.png" alt="New Age Now" class="radio-img" />
-              <img src="radio-ambient.png" alt="Ambient" class="radio-img" />
-              <img src="radio-spa.png" alt="SPA" class="radio-img" />
-              <img src="radio-calm-spa.png" alt="Calm SPA" class="radio-img" />
-              <img src="radio-piano.png" alt="Piano" class="radio-img" />
-              <img src="radio-new-age-now.png" alt="New Age Now" class="radio-img" />
-            </div>
+        <div class="radio-station-item">
+          <div class="radio-station-pulse"></div>
+          <div class="radio-station-img-wrap">
+            <img src="radio-calm-spa.png" alt="Calm SPA" class="radio-station-img" />
+          </div>
+          <div class="radio-station-info">
+            <span class="radio-station-name">Calm SPA</span>
+            <span class="radio-station-platform">Pandora Radio</span>
+          </div>
+          <div class="radio-station-live">
+            <span class="radio-live-dot"></span>
+            <span class="radio-live-text">Live</span>
+          </div>
+        </div>
+        <div class="radio-station-item">
+          <div class="radio-station-pulse"></div>
+          <div class="radio-station-img-wrap">
+            <img src="radio-piano.png" alt="Piano" class="radio-station-img" />
+          </div>
+          <div class="radio-station-info">
+            <span class="radio-station-name">Piano</span>
+            <span class="radio-station-platform">Pandora Radio</span>
+          </div>
+          <div class="radio-station-live">
+            <span class="radio-live-dot"></span>
+            <span class="radio-live-text">Live</span>
+          </div>
+        </div>
+        <div class="radio-station-item">
+          <div class="radio-station-pulse"></div>
+          <div class="radio-station-img-wrap">
+            <img src="radio-new-age-now.png" alt="New Age Now" class="radio-station-img" />
+          </div>
+          <div class="radio-station-info">
+            <span class="radio-station-name">New Age Now</span>
+            <span class="radio-station-platform">Pandora Radio</span>
+          </div>
+          <div class="radio-station-live">
+            <span class="radio-live-dot"></span>
+            <span class="radio-live-text">Live</span>
           </div>
         </div>
       </div>
-          <div class="cat-text">
-        <p style="font-size:13px;font-weight:300;color:var(--text-dim);line-height:2;letter-spacing:0.2px;">The DeepPulse catalogue features a growing collection of ambient works designed for sleep, meditation and continuous listening environments.</p>
-      </div>
+    </div>
 
+    <!-- Artist index — hidden, opened via modal only -->
+    <div class="cat-view-btn reveal" onclick="openModal()">
+      <span class="cat-view-label">Full Artist Catalogue</span>
+      <span class="cat-view-arrow">View All Artists</span>
     </div>
   </div>
 
   <div class="divider"></div>
 
-  <div class="wrap env-wrap" id="environments">
+  <div class="wrap env-wrap reveal" id="environments">
     <p class="eyebrow">Listening Environments</p>
     <h2 class="sec-title">Listening Environments</h2>
-    <p class="sec-desc">Designed for specific listening environments.</p>
+    <p class="sec-desc">Designed for specific listening contexts — each environment a distinct sound world.</p>
     <div class="env-list">
       <span class="env-item">Sleep</span>
       <span class="env-item">Meditation</span>
@@ -337,57 +1012,110 @@
   <div class="divider"></div>
 
   <div class="wrap" id="curated">
-    <p class="eyebrow">Curated Listening</p>
-    <h2 class="sec-title">Curated Listening</h2>
-    <p class="sec-desc">Selected listening environments curated from the DeepPulse catalogue across streaming platforms.</p>
-    <div class="curated-grid">
-      <a href="https://pandora.app.link/IAsWsSiut1b" target="_blank" rel="noopener noreferrer" class="curated-card">
-        <img src="playlist-deep-sleep.png" alt="Deep Sleep" class="curated-img" />
-        <p class="curated-name">Deep Sleep</p>
-        <p class="curated-desc">Sleep-focused listening environment</p>
-        <span class="curated-platform">Pandora</span>
-      </a>
-      <a href="https://pandora.app.link/oiiZpUGby1b" target="_blank" rel="noopener noreferrer" class="curated-card">
-        <img src="playlist-pure-calm.png" alt="Pure Calm" class="curated-img" />
-        <p class="curated-name">Pure Calm</p>
-        <p class="curated-desc">Continuous ambient listening</p>
-        <span class="curated-platform">Pandora</span>
-      </a>
-      <a href="https://open.spotify.com/playlist/3CI1HToAEWywO8V3izuv2L" target="_blank" rel="noopener noreferrer" class="curated-card">
-        <img src="playlist-deeppulse-catalogue.png" alt="DeepPulse Catalogue" class="curated-img" />
-        <p class="curated-name">DeepPulse Catalogue</p>
-        <p class="curated-desc">Complete catalogue listening</p>
-        <span class="curated-platform">Spotify</span>
-      </a>
+    <p class="eyebrow reveal">Curated Listening</p>
+    <h2 class="sec-title reveal reveal-delay-1">Curated Listening</h2>
+    <p class="sec-desc reveal reveal-delay-2">Selected listening environments curated from the DeepPulse catalogue across streaming platforms.</p>
+
+    <div class="curated-cards reveal reveal-delay-3">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-card-front-img">
+              <img src="playlist-deep-sleep.png" alt="Deep Sleep" />
+            </div>
+            <div class="flip-card-front-foot">
+              <p class="flip-card-name">Deep Sleep</p>
+              <p class="flip-card-hint">Hover to explore</p>
+            </div>
+          </div>
+          <a href="https://pandora.app.link/IAsWsSiut1b" target="_blank" rel="noopener noreferrer" class="flip-card-back">
+            <span class="flip-card-back-name">Deep Sleep</span>
+            <span class="flip-card-back-desc">Sleep-focused listening environment for deep rest</span>
+            <span class="flip-card-back-platform">Listen on Pandora</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-card-front-img">
+              <img src="playlist-pure-calm.png" alt="Pure Calm" />
+            </div>
+            <div class="flip-card-front-foot">
+              <p class="flip-card-name">Pure Calm</p>
+              <p class="flip-card-hint">Hover to explore</p>
+            </div>
+          </div>
+          <a href="https://pandora.app.link/oiiZpUGby1b" target="_blank" rel="noopener noreferrer" class="flip-card-back">
+            <span class="flip-card-back-name">Pure Calm</span>
+            <span class="flip-card-back-desc">Continuous ambient listening for meditation and focus</span>
+            <span class="flip-card-back-platform">Listen on Pandora</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-card-front-img">
+              <img src="playlist-deeppulse-catalogue.png" alt="DeepPulse Catalogue" />
+            </div>
+            <div class="flip-card-front-foot">
+              <p class="flip-card-name">DeepPulse Catalogue</p>
+              <p class="flip-card-hint">Hover to explore</p>
+            </div>
+          </div>
+          <a href="https://open.spotify.com/playlist/3CI1HToAEWywO8V3izuv2L" target="_blank" rel="noopener noreferrer" class="flip-card-back">
+            <span class="flip-card-back-name">DeepPulse Catalogue</span>
+            <span class="flip-card-back-desc">Complete catalogue — all artists and releases</span>
+            <span class="flip-card-back-platform">Listen on Spotify</span>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
-
-
   <div class="divider"></div>
+
+  <!-- Contact strip -->
+  <div class="contact-strip reveal">
+    <div class="contact-inner">
+      <div class="contact-text">
+        <h3>Get in touch</h3>
+        <p>For licensing, sync and catalogue enquiries.</p>
+      </div>
+      <a href="/cdn-cgi/l/email-protection#cbafaeaebbbbbea7b8aea7aaa9aea78baca6aaa2a7e5a8a4a6" class="btn-accent">Contact the Label</a>
+    </div>
+  </div>
+
+  <div class="footer-divider"></div>
 
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
         <span class="footer-logo">DeepPulse</span>
         <span class="footer-tagline">Sound ecosystems for sleep and ambient environments.</span>
-        <a href="mailto:deeppulselabel@gmail.com" style="font-size:9px;color:var(--text-faint);font-weight:300;letter-spacing:3px;text-transform:uppercase;text-decoration:none;margin-top:6px;transition:color 0.3s;opacity:0.6;" onmouseover="this.style.color='var(--text-dim)';this.style.opacity='1'" onmouseout="this.style.color='var(--text-faint)';this.style.opacity='0.6'">Contact</a>
       </div>
       <ul class="footer-nav">
         <li><a href="#catalogue">DeepPulse Records</a></li>
+        <li><a href="https://instagram.com/deeppulserecords" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#690d0c0c19191c051a0c05080b0c05290e04080005470a0604">Contact</a></li>
       </ul>
       <span class="footer-copy">2026</span>
     </div>
   </footer>
 
-  <div class="modal-overlay" id="catalogueModal" onclick="closeCatalogueOutside(event)">
+
+  <!-- Artist Modal -->
+  <div class="modal-overlay" id="artistModal" onclick="closeModalOutside(event)">
     <div class="modal">
       <div class="modal-header">
         <div>
           <p class="modal-eyebrow">DeepPulse Records</p>
           <h2 class="modal-title">Artist Catalogue</h2>
         </div>
-        <button class="modal-close" onclick="closeCatalogue()">✕</button>
+        <button class="modal-close" onclick="closeModal()">✕</button>
       </div>
       <div class="modal-body">
         <div class="modal-artist">
@@ -458,21 +1186,99 @@
     </div>
   </div>
 
-  <script>
-    function openCatalogue(e) {
-      e.preventDefault();
-      document.getElementById('catalogueModal').classList.add('open');
+    <script>
+    /* ── Custom cursor ── */
+    const cur = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+    });
+    function animRing() {
+      rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+    document.querySelectorAll('a, button, .env-item, .cat-view-btn, .flip-card').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+
+    /* ── Scrolled nav ── */
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    /* ── Scroll reveals ── */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ── Modal ── */
+    function openModal() {
+      document.getElementById('artistModal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-    function closeCatalogue() {
-      document.getElementById('catalogueModal').classList.remove('open');
+    function closeModal() {
+      document.getElementById('artistModal').classList.remove('open');
       document.body.style.overflow = '';
     }
-    function closeCatalogueOutside(e) {
-      if (e.target === document.getElementById('catalogueModal')) closeCatalogue();
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('artistModal')) closeModal();
     }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCatalogue(); });
-  </script>
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+    /* ── Floating particles ── */
+    (function() {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let W, H;
+      const particles = [];
+      const COUNT = 55;
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      for (let i = 0; i < COUNT; i++) {
+        particles.push({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          r: Math.random() * 1.2 + 0.2,
+          dx: (Math.random() - 0.5) * 0.18,
+          dy: (Math.random() - 0.5) * 0.12 - 0.04,
+          alpha: Math.random() * 0.4 + 0.05,
+          pulse: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.005 + Math.random() * 0.008
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+          p.x += p.dx; p.y += p.dy;
+          p.pulse += p.pulseSpeed;
+          if (p.x < -10) p.x = W + 10;
+          if (p.x > W + 10) p.x = -10;
+          if (p.y < -10) p.y = H + 10;
+          if (p.y > H + 10) p.y = -10;
+          const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(126,184,201,' + a + ')';
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
 </body>
 </html>
