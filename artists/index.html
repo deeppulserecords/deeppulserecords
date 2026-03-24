@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artists — DeepPulse Records</title>
+  <meta name="description" content="Artists roster of DeepPulse Records — Ambient catalog and sleep listening environments." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    html, body {
+      background: #faf9f7;
+      font-family: 'Jost', sans-serif;
+      color: #1a1a1a;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+ 
+    .dpr-page {
+      min-height: 100vh;
+      background: #faf9f7;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+ 
+    .dpr-header {
+      padding: 80px 0 56px;
+      border-bottom: 1px solid #e0ddd8;
+    }
+ 
+    .dpr-eyebrow {
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #b0a99e;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+ 
+    .dpr-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1.5px;
+      color: #0d0d0d;
+      margin-bottom: 24px;
+    }
+ 
+    .dpr-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+ 
+    .dpr-tagline {
+      font-size: 12px;
+      color: #a09890;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+ 
+    .dpr-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #ccc;
+      flex-shrink: 0;
+    }
+ 
+    .dpr-division {
+      font-size: 12px;
+      color: #c0b8b0;
+      font-weight: 300;
+      letter-spacing: 1px;
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+    }
+ 
+    .dpr-section {
+      padding: 52px 0;
+      border-bottom: 1px solid #ebe8e3;
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+ 
+    .dpr-section-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #b8b0a8;
+      font-weight: 300;
+      padding-top: 3px;
+    }
+ 
+    .dpr-about {
+      font-size: 15px;
+      line-height: 1.9;
+      color: #4a4540;
+      font-weight: 300;
+      max-width: 520px;
+    }
+ 
+    .dpr-artists {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+ 
+    .dpr-artist {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid #eeebe6;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+    }
+ 
+    .dpr-artist:last-child { border-bottom: none; }
+ 
+    .dpr-artist.has-link:hover { padding-left: 6px; }
+ 
+    .dpr-artist.has-link:hover .dpr-artist-name { color: #555; }
+ 
+    .dpr-artist-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: #1a1a1a;
+      letter-spacing: -0.3px;
+      transition: color 0.25s;
+    }
+ 
+    .dpr-artist-status {
+      font-size: 11px;
+      color: #ccc;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+ 
+    .dpr-artist-badges {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+ 
+    .dpr-spotify-badge, .dpr-pandora-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+ 
+    .dpr-spotify-badge { color: #1DB954; }
+    .dpr-pandora-badge { color: #224099; }
+ 
+    .dpr-spotify-badge:hover, .dpr-pandora-badge:hover { opacity: 0.7; }
+ 
+    .dpr-streaming {
+      font-size: 14px;
+      color: #6a6560;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+ 
+    .dpr-contact a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #1a1a1a;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,0,0,0.12);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+      letter-spacing: -0.3px;
+    }
+ 
+    .dpr-contact a:hover { color: #555; border-color: rgba(0,0,0,0.35); }
+ 
+    .dpr-footer {
+      padding: 40px 0 72px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+ 
+    .dpr-footer-text {
+      font-size: 10px;
+      color: #ccc;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+ 
+    .spotify-icon {
+      flex-shrink: 0;
+    }
+ 
+    @media (max-width: 600px) {
+      .dpr-page { padding: 0 24px; }
+      .dpr-header { padding: 56px 0 40px; }
+      .dpr-section { grid-template-columns: 1fr; gap: 20px; padding: 40px 0; }
+      .dpr-title { font-size: 40px; }
+      .dpr-header-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .dpr-dot { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="dpr-page">
+    <header class="dpr-header">
+      <p class="dpr-eyebrow">Music Label</p>
+      <h1 class="dpr-title">DEEPPULSE RECORDS</h1>
+      <div class="dpr-header-meta">
+        <span class="dpr-tagline">Ambient Catalog</span>
+        <div class="dpr-dot"></div>
+        <span class="dpr-tagline">Sleep Listening Environments</span>
+        <div class="dpr-dot"></div>
+        <span class="dpr-division">An ambient catalog division of North Vale Music</span>
+      </div>
+    </header>
+ 
+    <div>
+      <div class="dpr-section">
+        <span class="dpr-section-label">About</span>
+        <p class="dpr-about">
+          DeepPulse Records develops ambient catalog releases created by in-house composers and collaborative artists.
+        </p>
+      </div>
+ 
+      <div class="dpr-section">
+        <span class="dpr-section-label">Artists</span>
+        <div class="dpr-artists">
+ 
+          <!-- REMØRA -->
+          <div class="dpr-artist has-link">
+            <span class="dpr-artist-name">REMØRA</span>
+            <div class="dpr-artist-badges">
+              <a href="https://pandora.app.link/ixRBrZKW50b" target="_blank" rel="noopener noreferrer" class="dpr-pandora-badge">
+                <svg viewBox="0 0 24 24" fill="#224099" width="16" height="16" style="flex-shrink:0"><path d="M12.72 0H3.6v24h5.04v-8.64h4.08c4.56 0 7.68-3 7.68-7.68C20.4 3 17.28 0 12.72 0zm0 11.04H8.64V4.32h4.08c1.92 0 3.24 1.44 3.24 3.36s-1.32 3.36-3.24 3.36z"/></svg>
+                Pandora
+              </a>
+              <a href="https://open.spotify.com/artist/0Nbqt5GUfuG7JetAjGcBxl?si=grZ9NFZ8QyGFOI9pwR70yg" target="_blank" rel="noopener noreferrer" class="dpr-spotify-badge">
+                <svg viewBox="0 0 24 24" fill="#1DB954" width="16" height="16" style="flex-shrink:0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                Spotify
+              </a>
+            </div>
+          </div>
+ 
+          <!-- Novarion -->
+          <div class="dpr-artist has-link">
+            <span class="dpr-artist-name">Novarion</span>
+            <div class="dpr-artist-badges">
+              <a href="https://pandora.app.link/YlofBgUnx0b" target="_blank" rel="noopener noreferrer" class="dpr-pandora-badge">
+                <svg viewBox="0 0 24 24" fill="#224099" width="16" height="16" style="flex-shrink:0"><path d="M12.72 0H3.6v24h5.04v-8.64h4.08c4.56 0 7.68-3 7.68-7.68C20.4 3 17.28 0 12.72 0zm0 11.04H8.64V4.32h4.08c1.92 0 3.24 1.44 3.24 3.36s-1.32 3.36-3.24 3.36z"/></svg>
+                Pandora
+              </a>
+              <a href="https://open.spotify.com/artist/7DiT7CA5PgStZrg6shM4Pl?si=naO0TjRKQ5KbGJaGpoNFiw" target="_blank" rel="noopener noreferrer" class="dpr-spotify-badge">
+                <svg viewBox="0 0 24 24" fill="#1DB954" width="16" height="16" style="flex-shrink:0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                Spotify
+              </a>
+            </div>
+          </div>
+ 
+          <!-- Evan Lorne -->
+          <div class="dpr-artist has-link">
+            <span class="dpr-artist-name">Evan Lorne</span>
+            <div class="dpr-artist-badges">
+              <a href="https://pandora.app.link/mn8L2oXnx0b" target="_blank" rel="noopener noreferrer" class="dpr-pandora-badge">
+                <svg viewBox="0 0 24 24" fill="#224099" width="16" height="16" style="flex-shrink:0"><path d="M12.72 0H3.6v24h5.04v-8.64h4.08c4.56 0 7.68-3 7.68-7.68C20.4 3 17.28 0 12.72 0zm0 11.04H8.64V4.32h4.08c1.92 0 3.24 1.44 3.24 3.36s-1.32 3.36-3.24 3.36z"/></svg>
+                Pandora
+              </a>
+              <a href="https://open.spotify.com/artist/69gxEeYESyS449DEMFHmRE?si=bLFNzP1mQ-OlIescdaj4aw" target="_blank" rel="noopener noreferrer" class="dpr-spotify-badge">
+                <svg viewBox="0 0 24 24" fill="#1DB954" width="16" height="16" style="flex-shrink:0"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                Spotify
+              </a>
+            </div>
+          </div>
+ 
+          <!-- Coming Soon Artists -->
+          <div class="dpr-artist">
+            <span class="dpr-artist-name">Theo Somna</span>
+            <span class="dpr-artist-status">Coming Soon</span>
+          </div>
+          <div class="dpr-artist">
+            <span class="dpr-artist-name">Owen Marek</span>
+            <span class="dpr-artist-status">Coming Soon</span>
+          </div>
+          <div class="dpr-artist">
+            <span class="dpr-artist-name">Elias Varyn</span>
+            <span class="dpr-artist-status">Coming Soon</span>
+          </div>
+          <div class="dpr-artist">
+            <span class="dpr-artist-name">Noah Selvek</span>
+            <span class="dpr-artist-status">Coming Soon</span>
+          </div>
+          <div class="dpr-artist">
+            <span class="dpr-artist-name">Adrian Vale</span>
+            <span class="dpr-artist-status">Coming Soon</span>
+          </div>
+          <div class="dpr-artist">
+            <span class="dpr-artist-name">Milan Orvek</span>
+            <span class="dpr-artist-status">Coming Soon</span>
+          </div>
+ 
+        </div>
+      </div>
+ 
+      <div class="dpr-section">
+        <span class="dpr-section-label">Streaming</span>
+        <p class="dpr-streaming">Available on Pandora and Spotify.</p>
+      </div>
+ 
+      <div class="dpr-section" style="border-bottom: none;">
+        <span class="dpr-section-label">Contact</span>
+        <div class="dpr-contact">
+          <a href="mailto:deeppulselabel@gmail.com">deeppulselabel@gmail.com</a>
+        </div>
+      </div>
+    </div>
+ 
+    <footer class="dpr-footer">
+      <span class="dpr-footer-text">DeepPulse Records</span>
+      <span class="dpr-footer-text">2026</span>
+    </footer>
+  </div>
+</body>
+</html>
+ 
