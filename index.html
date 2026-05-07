@@ -136,10 +136,10 @@
     max-width: 680px; margin: 0 auto; padding: 0 32px;
   }
 
-  /* HEADER */
+/* HEADER */
   header {
     display: flex; align-items: center;
-    justify-content: center; gap: 18px;
+    justify-content: flex-start; gap: 18px;
     padding: 44px 0 0;
     opacity: 0;
     animation: fadeUp 1s ease 0.3s forwards;
@@ -150,6 +150,7 @@
     transition: filter 0.5s;
     display: block;
   }
+
   header:hover .logo-mark svg {
     filter: drop-shadow(0 0 14px rgba(201,168,76,0.3));
   }
