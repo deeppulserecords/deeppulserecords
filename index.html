@@ -610,15 +610,36 @@
   .modal-footer {
     padding: 20px 44px 36px;
     border-top: 1px solid rgba(201,168,76,0.06);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .modal-footer-dot {
-    width: 4px; height: 4px; border-radius: 50%;
-    background: var(--gold); opacity: 0.3; flex-shrink: 0;
+    display: flex; align-items: center; gap: 12px;
   }
   .modal-footer-text {
     font-size: 0.38rem; letter-spacing: 0.45em; font-weight: 200;
-    color: rgba(245,240,232,0.18);
+    color: rgba(245,240,232,0.22); font-style: italic;
+  }
+  .modal-insta-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    text-decoration: none;
+    color: rgba(245,240,232,0.32);
+    font-size: 0.38rem; font-weight: 200; letter-spacing: 0.5em;
+    transition: color 0.3s ease;
+  }
+  .modal-insta-link:hover { color: var(--gold-light); }
+  .modal-insta-link:hover .modal-insta-icon { border-color: rgba(201,168,76,0.4); }
+  .modal-insta-link:hover .modal-insta-icon svg { stroke: var(--gold-light); }
+  .modal-insta-icon {
+    width: 24px; height: 24px;
+    border: 1px solid rgba(245,240,232,0.16);
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.3s ease;
+  }
+  .modal-insta-icon svg {
+    width: 12px; height: 12px;
+    stroke: rgba(245,240,232,0.4);
+    stroke-width: 1.6; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: stroke 0.3s ease;
   }
  
   @media (max-width: 480px) {
@@ -774,10 +795,7 @@
     </div>
     <div class="modal-sep"></div>
     <div class="dsp-list" id="dspList"></div>
-    <div class="modal-footer">
-      <div class="modal-footer-dot"></div>
-      <span class="modal-footer-text">STREAM · DOWNLOAD · SUPPORT</span>
-    </div>
+    <div class="modal-footer" id="modalFooter"></div>
   </div>
 </div>
  
@@ -798,6 +816,7 @@
   const ARTISTS = [
     {
       name: 'REMØRA',
+      instagram: 'https://www.instagram.com/remora_sleep/',
       links: [
         { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/intl-pt/artist/0Nbqt5GUfuG7JetAjGcBxl?si=jvIZEaQ7T-y1MwmZb9ZcRw' },
         { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/pt/artist/rem%C3%B8ra/1836144007' },
@@ -807,6 +826,7 @@
     },
     {
       name: 'MIREO SUN',
+      instagram: 'https://www.instagram.com/mireo.sun.music/',
       links: [
         { platform: 'spotify', label: 'SPOTIFY',      url: null },
         { platform: 'apple',   label: 'APPLE MUSIC',  url: null },
@@ -816,6 +836,7 @@
     },
     {
       name: 'NOVARION',
+      instagram: 'https://www.instagram.com/novarionsleep/',
       links: [
         { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/intl-pt/artist/7DiT7CA5PgStZrg6shM4Pl' },
         { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/us/artist/novarion/1820351682' },
@@ -825,6 +846,7 @@
     },
     {
       name: 'THEO SOUMNA',
+      instagram: null,
       links: [
         { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/artist/3LrO6ZDSpahX11KkDWGJCg?si=FT9sfBwST86WESjpdK_dvQ' },
         { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/pt/artist/theo-soumna/1872123041' },
@@ -834,6 +856,7 @@
     },
     {
       name: 'OWEN MAREK',
+      instagram: null,
       links: [
         { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/artist/05h5sty3jc98PuowHByCIK?si=g0dID4hoS_O90EBtYIQA9g' },
         { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/pt/artist/owen-marek/1872133697' },
@@ -843,6 +866,7 @@
     },
     {
       name: 'ELIAS VARYN',
+      instagram: null,
       links: [
         { platform: 'spotify', label: 'SPOTIFY',      url: null },
         { platform: 'apple',   label: 'APPLE MUSIC',  url: null },
@@ -852,6 +876,7 @@
     },
     {
       name: 'NOAH SELVEK',
+      instagram: null,
       links: [
         { platform: 'spotify', label: 'SPOTIFY',      url: null },
         { platform: 'apple',   label: 'APPLE MUSIC',  url: null },
@@ -861,6 +886,7 @@
     },
     {
       name: 'ADRIAN VALE',
+      instagram: null,
       links: [
         { platform: 'spotify', label: 'SPOTIFY',      url: null },
         { platform: 'apple',   label: 'APPLE MUSIC',  url: null },
@@ -898,6 +924,8 @@
   const modalArtistName = document.getElementById('modalArtistName');
   const dspList         = document.getElementById('dspList');
  
+  const modalFooter = document.getElementById('modalFooter');
+ 
   function openModal(artist) {
     modalArtistName.textContent = artist.name;
     dspList.innerHTML = '';
@@ -929,6 +957,26 @@
         dspList.appendChild(div);
       }
     });
+ 
+    // Footer: instagram link or generic phrase
+    if (artist.instagram) {
+      modalFooter.innerHTML = `
+        <a class="modal-insta-link" href="${artist.instagram}" target="_blank" rel="noopener noreferrer">
+          <div class="modal-insta-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          INSTAGRAM
+        </a>
+      `;
+    } else {
+      modalFooter.innerHTML = `
+        <span class="modal-footer-text">listen on your preferred platform</span>
+      `;
+    }
     backdrop.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
