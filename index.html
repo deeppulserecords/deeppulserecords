@@ -463,91 +463,162 @@
   }
   .streaming-arrow { font-size: 0.7rem; opacity: 0.3; transition: opacity 0.3s, transform 0.3s; }
  
-  /* MODAL */
+  /* ── MODAL ── */
   .modal-backdrop {
     position: fixed; inset: 0; z-index: 100;
     display: flex; align-items: center; justify-content: center; padding: 24px;
-    opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
   }
   .modal-backdrop.open { opacity: 1; pointer-events: all; }
   .modal-blur {
     position: absolute; inset: 0;
-    background: rgba(4,4,4,0.88);
-    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    background: rgba(2,2,2,0.92);
+    backdrop-filter: blur(40px) saturate(0.6);
+    -webkit-backdrop-filter: blur(40px) saturate(0.6);
   }
   .modal {
-    position: relative; z-index: 1; width: 100%; max-width: 480px;
-    background: linear-gradient(135deg, rgba(18,15,10,0.98) 0%, rgba(10,8,6,0.98) 100%);
-    border: 1px solid rgba(201,168,76,0.2); border-radius: 2px;
-    padding: 48px 40px 40px;
-    transform: translateY(30px) scale(0.97);
-    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
-    box-shadow: 0 0 0 1px rgba(201,168,76,0.05), 0 40px 80px rgba(0,0,0,0.8), 0 0 60px rgba(201,168,76,0.04);
+    position: relative; z-index: 1;
+    width: 100%; max-width: 440px;
+    background: rgba(10,8,6,0.97);
+    border: 1px solid rgba(201,168,76,0.12);
+    padding: 0;
+    transform: translateY(24px) scale(0.98);
+    transition: transform 0.65s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease;
+    overflow: hidden;
   }
   .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
-  .modal::before, .modal::after {
-    content: ''; position: absolute; width: 20px; height: 20px;
-    border-color: rgba(201,168,76,0.4); border-style: solid;
+ 
+  /* Top band — ambient gold glow */
+  .modal-band {
+    height: 3px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(201,168,76,0.15) 20%,
+      rgba(232,201,122,0.6) 50%,
+      rgba(201,168,76,0.15) 80%,
+      transparent 100%);
   }
-  .modal::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-  .modal::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+ 
+  /* Header area */
+  .modal-header {
+    padding: 44px 44px 32px;
+    position: relative;
+  }
   .modal-close {
-    position: absolute; top: 20px; right: 24px;
-    background: none; border: none;
-    color: rgba(245,240,232,0.4); font-size: 0.75rem;
-    letter-spacing: 0.2em; cursor: pointer;
-    font-family: 'Raleway', sans-serif; font-weight: 200;
-    transition: color 0.3s;
-  }
-  .modal-close:hover { color: var(--white); }
-  .modal-artist {
-    font-family: 'Raleway', sans-serif; font-weight: 100;
-    font-size: 1.6rem; letter-spacing: 0.25em; color: var(--white);
-    margin-bottom: 6px; -webkit-font-smoothing: antialiased;
-  }
-  .modal-subtitle {
-    font-size: 0.5rem; letter-spacing: 0.45em;
-    color: rgba(201,168,76,0.6); font-weight: 300;
-    margin-bottom: 36px; display: block;
-  }
-  .modal-divider {
-    height: 1px;
-    background: linear-gradient(90deg, rgba(201,168,76,0.5) 0%, rgba(201,168,76,0.05) 70%, transparent 100%);
-    margin-bottom: 32px;
-  }
-  .dsp-list { display: flex; flex-direction: column; gap: 4px; }
-  .dsp-link {
-    display: flex; align-items: center; gap: 16px;
-    padding: 14px 16px; text-decoration: none; color: var(--white);
-    border: 1px solid transparent; border-radius: 1px;
-    transition: all 0.3s ease; position: relative; overflow: hidden; cursor: pointer;
-  }
-  .dsp-link::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(90deg, rgba(201,168,76,0.06) 0%, transparent 100%);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .dsp-link:hover::before { opacity: 1; }
-  .dsp-link:hover { border-color: rgba(201,168,76,0.2); color: var(--gold-light); transform: translateX(4px); }
-  .dsp-icon {
-    width: 36px; height: 36px; border-radius: 50%;
+    position: absolute; top: 22px; right: 28px;
+    background: none; border: none; padding: 4px;
+    cursor: pointer; opacity: 0.28;
+    transition: opacity 0.3s ease;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; font-size: 1rem;
   }
-  .dsp-icon.spotify { background: rgba(30,215,96,0.12); }
-  .dsp-icon.apple   { background: rgba(252,60,68,0.12); }
-  .dsp-icon.amazon  { background: rgba(255,153,0,0.12); }
-  .dsp-icon.pandora { background: rgba(0,167,229,0.12); }
-  .dsp-name { font-size: 0.65rem; letter-spacing: 0.3em; font-weight: 300; flex: 1; }
-  .dsp-arrow { font-size: 0.7rem; opacity: 0.3; transition: opacity 0.3s, transform 0.3s; }
-  .dsp-link:hover .dsp-arrow { opacity: 0.8; transform: translateX(3px); }
+  .modal-close:hover { opacity: 0.7; }
+  .modal-close svg {
+    width: 14px; height: 14px;
+    stroke: var(--white); stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+  .modal-label {
+    font-size: 0.38rem; font-weight: 300;
+    letter-spacing: 0.7em; color: var(--gold);
+    opacity: 0.55; display: block; margin-bottom: 16px;
+  }
+  .modal-artist {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    letter-spacing: 0.04em; color: var(--white);
+    line-height: 1; display: block;
+    -webkit-font-smoothing: antialiased;
+  }
+ 
+  /* Thin separator */
+  .modal-sep {
+    margin: 0 44px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(201,168,76,0.25) 0%, rgba(201,168,76,0.03) 60%, transparent 100%);
+  }
+ 
+  /* DSP list */
+  .dsp-list {
+    padding: 8px 0 12px;
+    display: flex; flex-direction: column;
+  }
+  .dsp-link {
+    display: flex; align-items: center;
+    padding: 18px 44px;
+    text-decoration: none;
+    position: relative; overflow: hidden;
+    transition: background 0.35s ease;
+    gap: 0;
+  }
+  .dsp-link::after {
+    content: '';
+    position: absolute; bottom: 0; left: 44px; right: 44px;
+    height: 1px;
+    background: rgba(201,168,76,0.06);
+  }
+  .dsp-link:last-child::after { display: none; }
+  .dsp-link:hover { background: rgba(201,168,76,0.035); }
+  .dsp-link:hover .dsp-name { color: var(--gold-light); letter-spacing: 0.38em; }
+  .dsp-link:hover .dsp-platform-line { opacity: 1; transform: scaleX(1); }
+  .dsp-link:hover .dsp-ext { opacity: 0.5; transform: translate(2px,-2px); }
+ 
+  .dsp-text { flex: 1; }
+  .dsp-name {
+    display: block;
+    font-size: 0.6rem; font-weight: 200;
+    letter-spacing: 0.34em; color: rgba(245,240,232,0.7);
+    transition: color 0.3s ease, letter-spacing 0.4s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+  .dsp-platform-line {
+    display: block; margin-top: 5px;
+    height: 1px; width: 18px;
+    background: var(--gold);
+    opacity: 0; transform: scaleX(0); transform-origin: left;
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .dsp-ext {
+    width: 10px; height: 10px; flex-shrink: 0;
+    opacity: 0; transition: opacity 0.3s, transform 0.3s;
+  }
+  .dsp-ext svg { width: 10px; height: 10px; stroke: var(--gold); stroke-width: 1.5; stroke-linecap: round; }
+ 
+  /* Coming soon row */
   .dsp-coming-soon {
-    display: flex; align-items: center; gap: 16px;
-    padding: 14px 16px; opacity: 0.25; pointer-events: none;
+    display: flex; align-items: center;
+    padding: 18px 44px;
+    position: relative;
+    opacity: 0.18; pointer-events: none;
   }
+  .dsp-coming-soon::after {
+    content: '';
+    position: absolute; bottom: 0; left: 44px; right: 44px;
+    height: 1px; background: rgba(201,168,76,0.06);
+  }
+  .dsp-coming-soon:last-child::after { display: none; }
+  .dsp-coming-soon .dsp-name { color: var(--white); letter-spacing: 0.34em; }
   .coming-soon-text {
-    font-size: 0.55rem; letter-spacing: 0.35em;
-    font-weight: 200; font-style: italic; color: var(--white); flex: 1;
+    font-size: 0.36rem; letter-spacing: 0.55em;
+    font-weight: 200; font-style: italic;
+    color: rgba(245,240,232,0.5);
+    margin-left: auto;
+  }
+ 
+  /* Footer of modal */
+  .modal-footer {
+    padding: 20px 44px 36px;
+    border-top: 1px solid rgba(201,168,76,0.06);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .modal-footer-dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold); opacity: 0.3; flex-shrink: 0;
+  }
+  .modal-footer-text {
+    font-size: 0.38rem; letter-spacing: 0.45em; font-weight: 200;
+    color: rgba(245,240,232,0.18);
   }
  
   @media (max-width: 480px) {
@@ -690,11 +761,23 @@
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal-blur" id="modalBlur"></div>
   <div class="modal">
-    <button class="modal-close" id="modalClose">CLOSE ×</button>
-    <div class="modal-artist" id="modalArtistName"></div>
-    <span class="modal-subtitle">LISTEN ON</span>
-    <div class="modal-divider"></div>
+    <div class="modal-band"></div>
+    <div class="modal-header">
+      <button class="modal-close" id="modalClose" aria-label="Close">
+        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="1" y1="1" x2="13" y2="13"/>
+          <line x1="13" y1="1" x2="1" y2="13"/>
+        </svg>
+      </button>
+      <span class="modal-label">ARTIST</span>
+      <span class="modal-artist" id="modalArtistName"></span>
+    </div>
+    <div class="modal-sep"></div>
     <div class="dsp-list" id="dspList"></div>
+    <div class="modal-footer">
+      <div class="modal-footer-dot"></div>
+      <span class="modal-footer-text">STREAM · DOWNLOAD · SUPPORT</span>
+    </div>
   </div>
 </div>
  
@@ -819,24 +902,29 @@
     modalArtistName.textContent = artist.name;
     dspList.innerHTML = '';
     artist.links.forEach(link => {
-      const icon = DSP_ICONS[link.platform];
       if (link.url) {
         const a = document.createElement('a');
         a.className = 'dsp-link';
         a.href = link.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
         a.innerHTML = `
-          <div class="dsp-icon ${link.platform}" style="color:${icon.color}">${icon.emoji}</div>
-          <span class="dsp-name">${link.label}</span>
-          <span class="dsp-arrow">→</span>
+          <div class="dsp-text">
+            <span class="dsp-name">${link.label}</span>
+            <span class="dsp-platform-line"></span>
+          </div>
+          <div class="dsp-ext">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="1" y1="9" x2="9" y2="1"/>
+              <polyline points="4,1 9,1 9,6"/>
+            </svg>
+          </div>
         `;
         dspList.appendChild(a);
       } else {
         const div = document.createElement('div');
         div.className = 'dsp-coming-soon';
         div.innerHTML = `
-          <div class="dsp-icon ${link.platform}" style="color:${icon.color};opacity:0.3">${icon.emoji}</div>
-          <span class="dsp-name" style="opacity:0.5">${link.label}</span>
-          <span class="coming-soon-text">COMING SOON</span>
+          <div class="dsp-text"><span class="dsp-name">${link.label}</span></div>
+          <span class="coming-soon-text">SOON</span>
         `;
         dspList.appendChild(div);
       }
