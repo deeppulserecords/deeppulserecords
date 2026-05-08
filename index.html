@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Raleway:wght@100;200;300;400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
+ 
   :root {
     --gold: #c9a84c;
     --gold-light: #e8c97a;
@@ -25,40 +25,23 @@
     --white: #f5f0e8;
     --bg: #080808;
   }
-
+ 
   html, body {
     background: var(--bg);
     color: var(--white);
     font-family: 'Raleway', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
-    cursor: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
   }
-
-  .cursor {
-    position: fixed; width: 6px; height: 6px;
-    background: var(--gold); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease, opacity 0.3s;
-    mix-blend-mode: screen;
-  }
-  .cursor-ring {
-    position: fixed; width: 32px; height: 32px;
-    border: 1px solid rgba(201,168,76,0.4); border-radius: 50%;
-    pointer-events: none; z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
-  }
+ 
   @media (hover: none) and (pointer: coarse) {
-    .cursor, .cursor-ring { display: none !important; }
     html, body { cursor: auto; }
   }
-
+ 
   /* LOADER */
   #loader {
     position: fixed; inset: 0; z-index: 10000;
@@ -95,7 +78,7 @@
   @keyframes loaderSweep {
     0% { left: -100%; opacity: 0; } 10% { opacity: 1; } 100% { left: 100%; opacity: 0.4; }
   }
-
+ 
   /* NOISE + VIGNETTE */
   body::before {
     content: ''; position: fixed; inset: 0;
@@ -107,7 +90,7 @@
     background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%);
     pointer-events: none; z-index: 2;
   }
-
+ 
   /* AMBIENT BLOBS */
   .ambient {
     position: fixed; border-radius: 50%; filter: blur(120px);
@@ -128,14 +111,14 @@
     0% { transform: translate(0,0) scale(1); }
     100% { transform: translate(40px,-30px) scale(1.1); }
   }
-
+ 
   /* LAYOUT */
   .page {
     position: relative; z-index: 3;
     min-height: 100vh; display: flex; flex-direction: column;
     max-width: 680px; margin: 0 auto; padding: 0 32px;
   }
-
+ 
   /* HEADER */
   header {
     display: flex; align-items: center;
@@ -164,7 +147,7 @@
     letter-spacing: 0.52em; color: rgba(245,240,232,0.4);
     display: block; margin-top: 4px;
   }
-
+ 
   /* HERO */
   .hero {
     padding: 64px 0 52px;
@@ -190,7 +173,7 @@
     letter-spacing: 0.18em; line-height: 1.9;
     color: rgba(245,240,232,0.45); max-width: 420px;
   }
-
+ 
   /* ARTIST LIST */
   .artist-list { padding: 44px 0 8px; }
   .section-label {
@@ -207,7 +190,7 @@
   }
   @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
   @keyframes fadeUp  { to { opacity: 1; transform: translateY(0); } }
-
+ 
   .artist-divider {
     height: 1px;
     background: linear-gradient(90deg, rgba(201,168,76,0.6) 0%, rgba(201,168,76,0.08) 50%, transparent 100%);
@@ -248,7 +231,7 @@
     opacity: 0; transition: opacity 0.5s; pointer-events: none;
   }
   .artist-item:hover .hover-glow { opacity: 1; }
-
+ 
   /* STAGGER 9 artists */
   .artist-item:nth-child(1) { animation-delay: 1.10s; }
   .artist-item:nth-child(2) { animation-delay: 1.22s; }
@@ -268,7 +251,7 @@
   .artist-item:nth-child(7) .artist-divider::after { animation-delay: 3.0s; }
   .artist-item:nth-child(8) .artist-divider::after { animation-delay: 3.5s; }
   .artist-item:nth-child(9) .artist-divider::after { animation-delay: 4.0s; }
-
+ 
   /* A&R CONTACT */
   .contact-section {
     padding: 52px 0 12px;
@@ -304,11 +287,11 @@
   .contact-link:hover { color: var(--gold-light); border-color: var(--gold-light); }
   .contact-link-arrow { font-size: 0.8rem; transition: transform 0.3s; }
   .contact-link:hover .contact-link-arrow { transform: translateX(4px); }
-
+ 
   /* ─── FOOTER — premium redesign ─── */
   footer {
     padding: 40px 0 52px;
-    margin-top: 48px;
+    margin-top: 40px;
     border-top: 1px solid rgba(201,168,76,0.06);
     display: flex;
     align-items: center;
@@ -316,7 +299,7 @@
     opacity: 0;
     animation: fadeUp 1s ease 2.5s forwards;
   }
-
+ 
   .footer-left {
     display: flex;
     align-items: center;
@@ -332,16 +315,16 @@
     font-size: 0.42rem;
     font-weight: 300;
     letter-spacing: 0.4em;
-    color: rgba(245,240,232,0.2);
+    color: rgba(245,240,232,0.5);
   }
-
+ 
   /* Instagram link — premium treatment */
   .footer-insta {
     display: flex;
     align-items: center;
     gap: 10px;
     text-decoration: none;
-    color: rgba(245,240,232,0.28);
+    color: rgba(245,240,232,0.5);
     font-size: 0.42rem;
     font-weight: 300;
     letter-spacing: 0.38em;
@@ -359,7 +342,7 @@
   .footer-insta:hover .insta-icon-wrap svg {
     stroke: var(--gold-light);
   }
-
+ 
   /* Icon container — subtle bordered square, premium */
   .insta-icon-wrap {
     width: 26px;
@@ -375,11 +358,111 @@
   .insta-icon-wrap svg {
     width: 13px;
     height: 13px;
-    stroke: rgba(245,240,232,0.35);
+    stroke: rgba(245,240,232,0.55);
     transition: stroke 0.4s ease;
     display: block;
   }
-
+ 
+  /* ─── SPOTIFY PLAYER SECTION ─── */
+  .catalogue-section {
+    padding: 52px 0 0;
+    border-top: 1px solid rgba(201,168,76,0.08);
+    opacity: 0;
+    animation: fadeUp 1s ease 2.2s forwards;
+  }
+  .catalogue-eyebrow {
+    font-size: 0.42rem; font-weight: 300;
+    letter-spacing: 0.6em; color: rgba(245,240,232,0.22);
+    display: block; margin-bottom: 14px;
+  }
+  .catalogue-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.45rem);
+    color: var(--white); margin-bottom: 6px;
+    letter-spacing: 0.03em; -webkit-font-smoothing: antialiased;
+  }
+  .catalogue-sub {
+    font-size: 0.52rem; font-weight: 300;
+    letter-spacing: 0.22em; color: rgba(245,240,232,0.32);
+    margin-bottom: 28px; display: block;
+  }
+  .spotify-embed-wrapper {
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.04);
+  }
+  .spotify-embed-wrapper iframe {
+    display: block;
+    width: 100%;
+    border: none;
+  }
+ 
+  /* ─── STREAMING LINKS SECTION ─── */
+  .streaming-section {
+    padding: 48px 0 0;
+    opacity: 0;
+    animation: fadeUp 1s ease 2.35s forwards;
+  }
+  .streaming-eyebrow {
+    font-size: 0.42rem; font-weight: 300;
+    letter-spacing: 0.6em; color: rgba(245,240,232,0.22);
+    display: block; margin-bottom: 14px;
+  }
+  .streaming-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.45rem);
+    color: var(--white); margin-bottom: 28px;
+    letter-spacing: 0.03em; -webkit-font-smoothing: antialiased;
+  }
+  .streaming-links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .streaming-link {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 18px;
+    text-decoration: none; color: var(--white);
+    border: 1px solid rgba(201,168,76,0.08);
+    border-radius: 1px;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+    background: rgba(255,255,255,0.015);
+  }
+  .streaming-link::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(201,168,76,0.06) 0%, transparent 100%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .streaming-link:hover::before { opacity: 1; }
+  .streaming-link:hover {
+    border-color: rgba(201,168,76,0.25);
+    color: var(--gold-light);
+    transform: translateX(4px);
+  }
+  .streaming-link:hover .streaming-arrow { opacity: 0.8; transform: translateX(3px); }
+  .streaming-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1rem;
+  }
+  .streaming-icon.spotify  { background: rgba(30,215,96,0.12);  color: #1ed760; }
+  .streaming-icon.pandora  { background: rgba(0,167,229,0.12);  color: #00a7e5; }
+  .streaming-platform {
+    flex: 1;
+    font-size: 0.65rem; letter-spacing: 0.3em; font-weight: 300;
+  }
+  .streaming-desc {
+    font-size: 0.46rem; letter-spacing: 0.2em; font-weight: 300;
+    color: rgba(245,240,232,0.28);
+    margin-top: 2px; display: block;
+    font-style: italic;
+  }
+  .streaming-arrow { font-size: 0.7rem; opacity: 0.3; transition: opacity 0.3s, transform 0.3s; }
+ 
   /* MODAL */
   .modal-backdrop {
     position: fixed; inset: 0; z-index: 100;
@@ -466,7 +549,7 @@
     font-size: 0.55rem; letter-spacing: 0.35em;
     font-weight: 200; font-style: italic; color: var(--white); flex: 1;
   }
-
+ 
   @media (max-width: 480px) {
     .page { padding: 0 24px; }
     .modal { padding: 40px 28px 32px; }
@@ -477,7 +560,7 @@
 </style>
 </head>
 <body>
-
+ 
 <!-- Loader -->
 <div id="loader">
   <div class="loader-mark">
@@ -492,14 +575,12 @@
   </div>
   <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
 </div>
-
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+ 
 <div class="ambient ambient-1"></div>
 <div class="ambient ambient-2"></div>
-
+ 
 <div class="page">
-
+ 
   <!-- Header -->
   <header>
     <div class="logo-mark">
@@ -513,20 +594,20 @@
       <span class="logo-sub">RECORDS</span>
     </div>
   </header>
-
+ 
   <!-- Hero -->
   <section class="hero">
     <span class="hero-eyebrow">WELLNESS MUSIC LABEL</span>
     <h1 class="hero-headline">Elevating consciousness<br>through <em>immersive sound.</em></h1>
     <p class="hero-body">DeepPulse is a wellness music label and creative ecosystem dedicated to ambient, meditative and healing soundscapes. We create experiences that support well-being, mindfulness and deep connection.</p>
   </section>
-
+ 
   <!-- Artist List -->
   <div class="artist-list">
     <span class="section-label">ROSTER</span>
     <div id="artistList"></div>
   </div>
-
+ 
   <!-- A&R Contact -->
   <div class="contact-section">
     <span class="contact-eyebrow">CONTACT</span>
@@ -537,7 +618,46 @@
       <span class="contact-link-arrow">→</span>
     </a>
   </div>
-
+ 
+  <!-- Spotify Catalogue Player -->
+  <div class="catalogue-section">
+    <span class="catalogue-eyebrow">CATALOGUE</span>
+    <h2 class="catalogue-headline">Complete Catalogue</h2>
+    <span class="catalogue-sub">Latest releases at the top — updated continuously</span>
+    <div class="spotify-embed-wrapper">
+      <iframe
+        src="https://open.spotify.com/embed/playlist/3CI1HToAEWywO8V3izuv2L?utm_source=generator&theme=0"
+        height="460"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+ 
+  <!-- Streaming Platforms -->
+  <div class="streaming-section">
+    <span class="streaming-eyebrow">FOLLOW US</span>
+    <h2 class="streaming-headline">Find us on all platforms</h2>
+    <div class="streaming-links">
+      <a class="streaming-link" href="https://open.spotify.com/user/31j7eykltzoicjjcugkjy72cug5u?si=a11cc0213b9f4903" target="_blank" rel="noopener noreferrer">
+        <div class="streaming-icon spotify">♫</div>
+        <div>
+          <span class="streaming-platform">SPOTIFY</span>
+          <span class="streaming-desc">Full catalogue · All artists · Playlists</span>
+        </div>
+        <span class="streaming-arrow">→</span>
+      </a>
+      <a class="streaming-link" href="https://pandora.app.link/7jPryGDkY2b" target="_blank" rel="noopener noreferrer">
+        <div class="streaming-icon pandora">◉</div>
+        <div>
+          <span class="streaming-platform">PANDORA</span>
+          <span class="streaming-desc">Stream our artists on Pandora</span>
+        </div>
+        <span class="streaming-arrow">→</span>
+      </a>
+    </div>
+  </div>
+ 
   <!-- Footer -->
   <footer>
     <div class="footer-left">
@@ -549,7 +669,7 @@
       </div>
       <span class="footer-copy">© <span id="footerYear"></span> DEEPPULSE RECORDS</span>
     </div>
-
+ 
     <!-- Instagram — premium -->
     <a class="footer-insta" href="https://instagram.com/deeppulserecords" target="_blank" rel="noopener noreferrer">
       <div class="insta-icon-wrap">
@@ -563,9 +683,9 @@
       @deeppulserecords
     </a>
   </footer>
-
+ 
 </div>
-
+ 
 <!-- Modal -->
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal-blur" id="modalBlur"></div>
@@ -577,37 +697,21 @@
     <div class="dsp-list" id="dspList"></div>
   </div>
 </div>
-
+ 
 <script>
   document.getElementById('footerYear').textContent = new Date().getFullYear();
-
+ 
   const loader = document.getElementById('loader');
   window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 1200));
   setTimeout(() => loader.classList.add('hidden'), 3000);
-
-  const cursor     = document.getElementById('cursor');
-  const cursorRing = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  function animateCursor() {
-    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-    cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px';
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
-  document.querySelectorAll('a, button, .artist-item, .dsp-badge').forEach(el => {
-    el.addEventListener('mouseenter', () => cursorRing.style.transform = 'translate(-50%,-50%) scale(1.8)');
-    el.addEventListener('mouseleave', () => cursorRing.style.transform = 'translate(-50%,-50%) scale(1)');
-  });
-
+ 
   const DSP_ICONS = {
     spotify: { emoji: '♫', color: '#1ed760' },
     apple:   { emoji: '♪', color: '#fc3c44' },
     amazon:  { emoji: '◈', color: '#ff9900' },
     pandora: { emoji: '◉', color: '#00a7e5' },
   };
-
+ 
   const ARTISTS = [
     {
       name: 'REMØRA',
@@ -691,7 +795,7 @@
       ]
     },
   ];
-
+ 
   const listEl = document.getElementById('artistList');
   ARTISTS.forEach(artist => {
     const item = document.createElement('div');
@@ -704,13 +808,13 @@
     item.addEventListener('click', () => openModal(artist));
     listEl.appendChild(item);
   });
-
+ 
   const backdrop        = document.getElementById('modalBackdrop');
   const modalBlur       = document.getElementById('modalBlur');
   const modalClose      = document.getElementById('modalClose');
   const modalArtistName = document.getElementById('modalArtistName');
   const dspList         = document.getElementById('dspList');
-
+ 
   function openModal(artist) {
     modalArtistName.textContent = artist.name;
     dspList.innerHTML = '';
@@ -740,12 +844,12 @@
     backdrop.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-
+ 
   function closeModal() {
     backdrop.classList.remove('open');
     document.body.style.overflow = '';
   }
-
+ 
   modalClose.addEventListener('click', closeModal);
   modalBlur.addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
