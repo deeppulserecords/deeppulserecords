@@ -1,0 +1,995 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepPulse Records — Independent Ambient Label</title>
+<meta name="description" content="DeepPulse is a wellness music label and creative ecosystem dedicated to ambient, meditative and healing soundscapes.">
+<meta property="og:title" content="DeepPulse Records">
+<meta property="og:description" content="Elevating consciousness through immersive sound.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://deeppulserecords.com">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DeepPulse Records">
+<meta name="twitter:description" content="Elevating consciousness through immersive sound.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Raleway:wght@100;200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --white: #f5f0e8;
+    --bg: #080808;
+  }
+ 
+  html, body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Raleway', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+ 
+  @media (hover: none) and (pointer: coarse) {
+    html, body { cursor: auto; }
+  }
+ 
+  /* LOADER */
+  #loader {
+    position: fixed; inset: 0; z-index: 10000;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 28px;
+    transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), visibility 0.9s;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-mark { margin-bottom: 4px; animation: loaderPulse 2.4s ease-in-out infinite; }
+  .loader-mark svg { width: 42px; height: 32px; }
+  .loader-logo { text-align: center; animation: loaderPulse 2.4s ease-in-out infinite; animation-delay: 0.2s; }
+  .loader-logo-main {
+    display: block; font-family: 'Raleway', sans-serif;
+    font-weight: 100; font-size: clamp(1rem, 4vw, 1.3rem);
+    letter-spacing: 0.55em; color: var(--white);
+    -webkit-font-smoothing: antialiased;
+  }
+  .loader-logo-sub {
+    display: block; font-family: 'Raleway', sans-serif;
+    font-weight: 200; font-size: clamp(0.45rem, 1.5vw, 0.6rem);
+    letter-spacing: 0.65em; color: rgba(245,240,232,0.35); margin-top: 7px;
+  }
+  @keyframes loaderPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+  .loader-bar-track {
+    width: 120px; height: 1px;
+    background: rgba(201,168,76,0.12); position: relative; overflow: hidden;
+  }
+  .loader-bar-fill {
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+    animation: loaderSweep 1.6s cubic-bezier(0.4,0,0.2,1) infinite;
+  }
+  @keyframes loaderSweep {
+    0% { left: -100%; opacity: 0; } 10% { opacity: 1; } 100% { left: 100%; opacity: 0.4; }
+  }
+ 
+  /* NOISE + VIGNETTE */
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1; opacity: 0.6;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%);
+    pointer-events: none; z-index: 2;
+  }
+ 
+  /* AMBIENT BLOBS */
+  .ambient {
+    position: fixed; border-radius: 50%; filter: blur(120px);
+    pointer-events: none; z-index: 0;
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  .ambient-1 {
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(180,130,30,0.08) 0%, transparent 70%);
+    top: 20%; left: -10%;
+  }
+  .ambient-2 {
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%);
+    bottom: 30%; right: -5%; animation-delay: -9s;
+  }
+  @keyframes drift {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(40px,-30px) scale(1.1); }
+  }
+ 
+  /* LAYOUT */
+  .page {
+    position: relative; z-index: 3;
+    min-height: 100vh; display: flex; flex-direction: column;
+    max-width: 680px; margin: 0 auto; padding: 0 32px;
+  }
+ 
+  /* HEADER */
+  header {
+    display: flex; align-items: center;
+    justify-content: flex-start; gap: 18px;
+    padding: 44px 0 0;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+  .logo-mark svg {
+    width: 34px; height: 26px;
+    filter: drop-shadow(0 0 8px rgba(245,240,232,0.08));
+    transition: filter 0.5s;
+    display: block;
+  }
+  header:hover .logo-mark svg {
+    filter: drop-shadow(0 0 14px rgba(201,168,76,0.3));
+  }
+  .logo-text { text-align: left; }
+  .logo-main {
+    font-size: 0.72rem; font-weight: 200;
+    letter-spacing: 0.42em; color: var(--white);
+    display: block; -webkit-font-smoothing: antialiased;
+  }
+  .logo-sub {
+    font-size: 0.5rem; font-weight: 300;
+    letter-spacing: 0.52em; color: rgba(245,240,232,0.4);
+    display: block; margin-top: 4px;
+  }
+ 
+  /* HERO */
+  .hero {
+    padding: 64px 0 52px;
+    opacity: 0; animation: fadeUp 1s ease 0.65s forwards;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .hero-eyebrow {
+    font-size: 0.46rem; font-weight: 300;
+    letter-spacing: 0.6em; color: var(--gold);
+    display: block; margin-bottom: 20px; opacity: 0.8;
+  }
+  .hero-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    line-height: 1.22; color: var(--white);
+    letter-spacing: 0.02em; margin-bottom: 22px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .hero-headline em { font-style: normal; color: var(--gold-light); }
+  .hero-body {
+    font-size: 0.62rem; font-weight: 300;
+    letter-spacing: 0.18em; line-height: 1.9;
+    color: rgba(245,240,232,0.45); max-width: 420px;
+  }
+ 
+  /* ARTIST LIST */
+  .artist-list { padding: 44px 0 8px; }
+  .section-label {
+    font-size: 0.42rem; font-weight: 300;
+    letter-spacing: 0.6em; color: rgba(245,240,232,0.22);
+    display: block; margin-bottom: 8px;
+    opacity: 0; animation: fadeUp 0.8s ease 1.05s forwards;
+  }
+  .artist-item {
+    position: relative; opacity: 0;
+    transform: translateX(-20px);
+    animation: slideIn 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+    cursor: pointer;
+  }
+  @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+  @keyframes fadeUp  { to { opacity: 1; transform: translateY(0); } }
+ 
+  .artist-divider {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(201,168,76,0.6) 0%, rgba(201,168,76,0.08) 50%, transparent 100%);
+    position: relative; overflow: hidden;
+  }
+  .artist-divider::after {
+    content: ''; position: absolute;
+    top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,220,120,0.9), transparent);
+    animation: shimmer 4s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0% { left: -60%; opacity: 0; } 20% { opacity: 1; }
+    60% { left: 120%; opacity: 0.6; } 100% { left: 120%; opacity: 0; }
+  }
+  .artist-name {
+    font-family: 'Raleway', sans-serif; font-weight: 100;
+    font-size: clamp(1.6rem, 5vw, 2.1rem);
+    letter-spacing: 0.22em; color: var(--white);
+    padding: 22px 0 20px; display: block; position: relative;
+    transition: color 0.4s ease, letter-spacing 0.4s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+  .artist-item:hover .artist-name { color: var(--gold-light); letter-spacing: 0.28em; }
+  .artist-item::before {
+    content: ''; position: absolute;
+    left: -32px; top: 50%;
+    transform: translateY(-50%) scaleY(0);
+    width: 2px; height: 60%;
+    background: linear-gradient(180deg, transparent, var(--gold), transparent);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.4s;
+    opacity: 0;
+  }
+  .artist-item:hover::before { transform: translateY(-50%) scaleY(1); opacity: 1; }
+  .artist-item .hover-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 0% 50%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.5s; pointer-events: none;
+  }
+  .artist-item:hover .hover-glow { opacity: 1; }
+ 
+  /* STAGGER 9 artists */
+  .artist-item:nth-child(1) { animation-delay: 1.10s; }
+  .artist-item:nth-child(2) { animation-delay: 1.22s; }
+  .artist-item:nth-child(3) { animation-delay: 1.34s; }
+  .artist-item:nth-child(4) { animation-delay: 1.46s; }
+  .artist-item:nth-child(5) { animation-delay: 1.58s; }
+  .artist-item:nth-child(6) { animation-delay: 1.70s; }
+  .artist-item:nth-child(7) { animation-delay: 1.82s; }
+  .artist-item:nth-child(8) { animation-delay: 1.94s; }
+  .artist-item:nth-child(9) { animation-delay: 2.06s; }
+  .artist-item:nth-child(1) .artist-divider::after { animation-delay: 0.0s; }
+  .artist-item:nth-child(2) .artist-divider::after { animation-delay: 0.5s; }
+  .artist-item:nth-child(3) .artist-divider::after { animation-delay: 1.0s; }
+  .artist-item:nth-child(4) .artist-divider::after { animation-delay: 1.5s; }
+  .artist-item:nth-child(5) .artist-divider::after { animation-delay: 2.0s; }
+  .artist-item:nth-child(6) .artist-divider::after { animation-delay: 2.5s; }
+  .artist-item:nth-child(7) .artist-divider::after { animation-delay: 3.0s; }
+  .artist-item:nth-child(8) .artist-divider::after { animation-delay: 3.5s; }
+  .artist-item:nth-child(9) .artist-divider::after { animation-delay: 4.0s; }
+ 
+  /* A&R CONTACT */
+  .contact-section {
+    padding: 52px 0 12px;
+    border-top: 1px solid rgba(201,168,76,0.08);
+    opacity: 0; animation: fadeUp 1s ease 2.3s forwards;
+  }
+  .contact-eyebrow {
+    font-size: 0.42rem; font-weight: 300;
+    letter-spacing: 0.6em; color: rgba(245,240,232,0.22);
+    display: block; margin-bottom: 14px;
+  }
+  .contact-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.45rem);
+    color: var(--white); margin-bottom: 18px;
+    letter-spacing: 0.03em; -webkit-font-smoothing: antialiased;
+  }
+  .contact-body {
+    font-size: 0.58rem; font-weight: 300;
+    letter-spacing: 0.18em; line-height: 2;
+    color: rgba(245,240,232,0.38); margin-bottom: 24px;
+  }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--gold);
+    font-size: 0.58rem; font-weight: 300; letter-spacing: 0.3em;
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    padding-bottom: 4px;
+    transition: color 0.3s, border-color 0.3s;
+    cursor: pointer;
+  }
+  .contact-link:hover { color: var(--gold-light); border-color: var(--gold-light); }
+  .contact-link-arrow { font-size: 0.8rem; transition: transform 0.3s; }
+  .contact-link:hover .contact-link-arrow { transform: translateX(4px); }
+ 
+  /* ─── FOOTER — premium redesign ─── */
+  footer {
+    padding: 40px 0 52px;
+    margin-top: 40px;
+    border-top: 1px solid rgba(201,168,76,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    animation: fadeUp 1s ease 2.5s forwards;
+  }
+ 
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .footer-mark svg {
+    width: 20px;
+    height: 16px;
+    opacity: 0.28;
+    display: block;
+  }
+  .footer-copy {
+    font-size: 0.42rem;
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    color: rgba(245,240,232,0.5);
+  }
+ 
+  /* Instagram link — premium treatment */
+  .footer-insta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: rgba(245,240,232,0.5);
+    font-size: 0.42rem;
+    font-weight: 300;
+    letter-spacing: 0.38em;
+    transition: color 0.4s ease;
+    position: relative;
+    cursor: pointer;
+  }
+  .footer-insta:hover {
+    color: var(--gold-light);
+  }
+  .footer-insta:hover .insta-icon-wrap {
+    border-color: rgba(201,168,76,0.5);
+    box-shadow: 0 0 14px rgba(201,168,76,0.12);
+  }
+  .footer-insta:hover .insta-icon-wrap svg {
+    stroke: var(--gold-light);
+  }
+ 
+  /* Icon container — subtle bordered square, premium */
+  .insta-icon-wrap {
+    width: 26px;
+    height: 26px;
+    border: 1px solid rgba(245,240,232,0.14);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .insta-icon-wrap svg {
+    width: 13px;
+    height: 13px;
+    stroke: rgba(245,240,232,0.55);
+    transition: stroke 0.4s ease;
+    display: block;
+  }
+ 
+  /* ─── SPOTIFY PLAYER SECTION ─── */
+  .catalogue-section {
+    padding: 52px 0 0;
+    border-top: 1px solid rgba(201,168,76,0.08);
+    opacity: 0;
+    animation: fadeUp 1s ease 2.2s forwards;
+  }
+  .catalogue-eyebrow {
+    font-size: 0.42rem; font-weight: 300;
+    letter-spacing: 0.6em; color: rgba(245,240,232,0.22);
+    display: block; margin-bottom: 14px;
+  }
+  .catalogue-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.45rem);
+    color: var(--white); margin-bottom: 6px;
+    letter-spacing: 0.03em; -webkit-font-smoothing: antialiased;
+  }
+  .catalogue-sub {
+    font-size: 0.52rem; font-weight: 300;
+    letter-spacing: 0.22em; color: rgba(245,240,232,0.32);
+    margin-bottom: 28px; display: block;
+  }
+  .spotify-embed-wrapper {
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.04);
+  }
+  .spotify-embed-wrapper iframe {
+    display: block;
+    width: 100%;
+    border: none;
+  }
+ 
+  /* ─── STREAMING LINKS SECTION ─── */
+  .streaming-section {
+    padding: 48px 0 0;
+    opacity: 0;
+    animation: fadeUp 1s ease 2.35s forwards;
+  }
+  .streaming-eyebrow {
+    font-size: 0.42rem; font-weight: 300;
+    letter-spacing: 0.6em; color: rgba(245,240,232,0.22);
+    display: block; margin-bottom: 14px;
+  }
+  .streaming-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.45rem);
+    color: var(--white); margin-bottom: 28px;
+    letter-spacing: 0.03em; -webkit-font-smoothing: antialiased;
+  }
+  .streaming-links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .streaming-link {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 18px;
+    text-decoration: none; color: var(--white);
+    border: 1px solid rgba(201,168,76,0.08);
+    border-radius: 1px;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+    background: rgba(255,255,255,0.015);
+  }
+  .streaming-link::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(201,168,76,0.06) 0%, transparent 100%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .streaming-link:hover::before { opacity: 1; }
+  .streaming-link:hover {
+    border-color: rgba(201,168,76,0.25);
+    color: var(--gold-light);
+    transform: translateX(4px);
+  }
+  .streaming-link:hover .streaming-arrow { opacity: 0.8; transform: translateX(3px); }
+  .streaming-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1rem;
+  }
+  .streaming-icon.spotify  { background: rgba(30,215,96,0.12);  color: #1ed760; }
+  .streaming-icon.pandora  { background: rgba(0,167,229,0.12);  color: #00a7e5; }
+  .streaming-platform {
+    flex: 1;
+    font-size: 0.65rem; letter-spacing: 0.3em; font-weight: 300;
+  }
+  .streaming-desc {
+    font-size: 0.46rem; letter-spacing: 0.2em; font-weight: 300;
+    color: rgba(245,240,232,0.28);
+    margin-top: 2px; display: block;
+    font-style: italic;
+  }
+  .streaming-arrow { font-size: 0.7rem; opacity: 0.3; transition: opacity 0.3s, transform 0.3s; }
+ 
+  /* ── MODAL ── */
+  .modal-backdrop {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  .modal-backdrop.open { opacity: 1; pointer-events: all; }
+  .modal-blur {
+    position: absolute; inset: 0;
+    background: rgba(2,2,2,0.92);
+    backdrop-filter: blur(40px) saturate(0.6);
+    -webkit-backdrop-filter: blur(40px) saturate(0.6);
+  }
+  .modal {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 440px;
+    background: rgba(10,8,6,0.97);
+    border: 1px solid rgba(201,168,76,0.12);
+    padding: 0;
+    transform: translateY(24px) scale(0.98);
+    transition: transform 0.65s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease;
+    overflow: hidden;
+  }
+  .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
+ 
+  /* Top band — ambient gold glow */
+  .modal-band {
+    height: 3px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(201,168,76,0.15) 20%,
+      rgba(232,201,122,0.6) 50%,
+      rgba(201,168,76,0.15) 80%,
+      transparent 100%);
+  }
+ 
+  /* Header area */
+  .modal-header {
+    padding: 44px 44px 32px;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 22px; right: 28px;
+    background: none; border: none; padding: 4px;
+    cursor: pointer; opacity: 0.28;
+    transition: opacity 0.3s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-close:hover { opacity: 0.7; }
+  .modal-close svg {
+    width: 14px; height: 14px;
+    stroke: var(--white); stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+  .modal-label {
+    font-size: 0.38rem; font-weight: 300;
+    letter-spacing: 0.7em; color: var(--gold);
+    opacity: 0.55; display: block; margin-bottom: 16px;
+  }
+  .modal-artist {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    letter-spacing: 0.04em; color: var(--white);
+    line-height: 1; display: block;
+    -webkit-font-smoothing: antialiased;
+  }
+ 
+  /* Thin separator */
+  .modal-sep {
+    margin: 0 44px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(201,168,76,0.25) 0%, rgba(201,168,76,0.03) 60%, transparent 100%);
+  }
+ 
+  /* DSP list */
+  .dsp-list {
+    padding: 8px 0 12px;
+    display: flex; flex-direction: column;
+  }
+  .dsp-link {
+    display: flex; align-items: center;
+    padding: 18px 44px;
+    text-decoration: none;
+    position: relative; overflow: hidden;
+    transition: background 0.35s ease;
+    gap: 0;
+  }
+  .dsp-link::after {
+    content: '';
+    position: absolute; bottom: 0; left: 44px; right: 44px;
+    height: 1px;
+    background: rgba(201,168,76,0.06);
+  }
+  .dsp-link:last-child::after { display: none; }
+  .dsp-link:hover { background: rgba(201,168,76,0.035); }
+  .dsp-link:hover .dsp-name { color: var(--gold-light); letter-spacing: 0.38em; }
+  .dsp-link:hover .dsp-platform-line { opacity: 1; transform: scaleX(1); }
+  .dsp-link:hover .dsp-ext { opacity: 0.5; transform: translate(2px,-2px); }
+ 
+  .dsp-text { flex: 1; }
+  .dsp-name {
+    display: block;
+    font-size: 0.6rem; font-weight: 200;
+    letter-spacing: 0.34em; color: rgba(245,240,232,0.7);
+    transition: color 0.3s ease, letter-spacing 0.4s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+  .dsp-platform-line {
+    display: block; margin-top: 5px;
+    height: 1px; width: 18px;
+    background: var(--gold);
+    opacity: 0; transform: scaleX(0); transform-origin: left;
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .dsp-ext {
+    width: 10px; height: 10px; flex-shrink: 0;
+    opacity: 0; transition: opacity 0.3s, transform 0.3s;
+  }
+  .dsp-ext svg { width: 10px; height: 10px; stroke: var(--gold); stroke-width: 1.5; stroke-linecap: round; }
+ 
+  /* Coming soon row */
+  .dsp-coming-soon {
+    display: flex; align-items: center;
+    padding: 18px 44px;
+    position: relative;
+    opacity: 0.18; pointer-events: none;
+  }
+  .dsp-coming-soon::after {
+    content: '';
+    position: absolute; bottom: 0; left: 44px; right: 44px;
+    height: 1px; background: rgba(201,168,76,0.06);
+  }
+  .dsp-coming-soon:last-child::after { display: none; }
+  .dsp-coming-soon .dsp-name { color: var(--white); letter-spacing: 0.34em; }
+  .coming-soon-text {
+    font-size: 0.36rem; letter-spacing: 0.55em;
+    font-weight: 200; font-style: italic;
+    color: rgba(245,240,232,0.5);
+    margin-left: auto;
+  }
+ 
+  /* Footer of modal */
+  .modal-footer {
+    padding: 20px 44px 36px;
+    border-top: 1px solid rgba(201,168,76,0.06);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .modal-footer-text {
+    font-size: 0.38rem; letter-spacing: 0.45em; font-weight: 200;
+    color: rgba(245,240,232,0.22); font-style: italic;
+  }
+  .modal-insta-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    text-decoration: none;
+    color: rgba(245,240,232,0.32);
+    font-size: 0.38rem; font-weight: 200; letter-spacing: 0.5em;
+    transition: color 0.3s ease;
+  }
+  .modal-insta-link:hover { color: var(--gold-light); }
+  .modal-insta-link:hover .modal-insta-icon { border-color: rgba(201,168,76,0.4); }
+  .modal-insta-link:hover .modal-insta-icon svg { stroke: var(--gold-light); }
+  .modal-insta-icon {
+    width: 24px; height: 24px;
+    border: 1px solid rgba(245,240,232,0.16);
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.3s ease;
+  }
+  .modal-insta-icon svg {
+    width: 12px; height: 12px;
+    stroke: rgba(245,240,232,0.4);
+    stroke-width: 1.6; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: stroke 0.3s ease;
+  }
+ 
+  @media (max-width: 480px) {
+    .page { padding: 0 24px; }
+    .modal { padding: 40px 28px 32px; }
+    .artist-name { font-size: 1.4rem; }
+    .hero-headline { font-size: 1.7rem; }
+    footer { flex-direction: column; gap: 16px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+ 
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-mark">
+    <svg viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14,0 L57,0 A11,11 0 0 1 57,22 L14,22 Z" fill="white"/>
+      <path d="M14,26 A11,11 0 0 0 14,48 L57,48 L57,26 Z" fill="white"/>
+    </svg>
+  </div>
+  <div class="loader-logo">
+    <span class="loader-logo-main">DEEPPULSE</span>
+    <span class="loader-logo-sub">RECORDS</span>
+  </div>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+</div>
+ 
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+ 
+<div class="page">
+ 
+  <!-- Header -->
+  <header>
+    <div class="logo-mark">
+      <svg viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14,0 L57,0 A11,11 0 0 1 57,22 L14,22 Z" fill="#f5f0e8"/>
+        <path d="M14,26 A11,11 0 0 0 14,48 L57,48 L57,26 Z" fill="#f5f0e8"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span class="logo-main">DEEPPULSE</span>
+      <span class="logo-sub">RECORDS</span>
+    </div>
+  </header>
+ 
+  <!-- Hero -->
+  <section class="hero">
+    <span class="hero-eyebrow">WELLNESS MUSIC LABEL</span>
+    <h1 class="hero-headline">Elevating consciousness<br>through <em>immersive sound.</em></h1>
+    <p class="hero-body">DeepPulse is a wellness music label and creative ecosystem dedicated to ambient, meditative and healing soundscapes. We create experiences that support well-being, mindfulness and deep connection.</p>
+  </section>
+ 
+  <!-- Artist List -->
+  <div class="artist-list">
+    <span class="section-label">ROSTER</span>
+    <div id="artistList"></div>
+  </div>
+ 
+  <!-- A&R Contact -->
+  <div class="contact-section">
+    <span class="contact-eyebrow">CONTACT</span>
+    <h2 class="contact-headline">Demos &amp; partnerships</h2>
+    <p class="contact-body">We listen to everything. If your sound fits the ambient and wellness space, reach out.</p>
+    <a class="contact-link" href="mailto:deeppulselabel@gmail.com">
+      deeppulselabel@gmail.com
+      <span class="contact-link-arrow">→</span>
+    </a>
+  </div>
+ 
+  <!-- Spotify Catalogue Player -->
+  <div class="catalogue-section">
+    <span class="catalogue-eyebrow">CATALOGUE</span>
+    <h2 class="catalogue-headline">Complete Catalogue</h2>
+    <span class="catalogue-sub">Latest releases at the top — updated continuously</span>
+    <div class="spotify-embed-wrapper">
+      <iframe
+        src="https://open.spotify.com/embed/playlist/3CI1HToAEWywO8V3izuv2L?utm_source=generator&theme=0"
+        height="460"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+ 
+  <!-- Streaming Platforms -->
+  <div class="streaming-section">
+    <span class="streaming-eyebrow">FOLLOW US</span>
+    <h2 class="streaming-headline">Find us on all platforms</h2>
+    <div class="streaming-links">
+      <a class="streaming-link" href="https://open.spotify.com/user/31j7eykltzoicjjcugkjy72cug5u?si=a11cc0213b9f4903" target="_blank" rel="noopener noreferrer">
+        <div class="streaming-icon spotify">♫</div>
+        <div>
+          <span class="streaming-platform">SPOTIFY</span>
+          <span class="streaming-desc">Full catalogue · All artists · Playlists</span>
+        </div>
+        <span class="streaming-arrow">→</span>
+      </a>
+      <a class="streaming-link" href="https://pandora.app.link/7jPryGDkY2b" target="_blank" rel="noopener noreferrer">
+        <div class="streaming-icon pandora">◉</div>
+        <div>
+          <span class="streaming-platform">PANDORA</span>
+          <span class="streaming-desc">Stream our artists on Pandora</span>
+        </div>
+        <span class="streaming-arrow">→</span>
+      </a>
+    </div>
+  </div>
+ 
+  <!-- Footer -->
+  <footer>
+    <div class="footer-left">
+      <div class="footer-mark">
+        <svg viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14,0 L57,0 A11,11 0 0 1 57,22 L14,22 Z" fill="#f5f0e8"/>
+          <path d="M14,26 A11,11 0 0 0 14,48 L57,48 L57,26 Z" fill="#f5f0e8"/>
+        </svg>
+      </div>
+      <span class="footer-copy">© <span id="footerYear"></span> DEEPPULSE RECORDS</span>
+    </div>
+ 
+    <!-- Instagram — premium -->
+    <a class="footer-insta" href="https://instagram.com/deeppulserecords" target="_blank" rel="noopener noreferrer">
+      <div class="insta-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      @deeppulserecords
+    </a>
+  </footer>
+ 
+</div>
+ 
+<!-- Modal -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-blur" id="modalBlur"></div>
+  <div class="modal">
+    <div class="modal-band"></div>
+    <div class="modal-header">
+      <button class="modal-close" id="modalClose" aria-label="Close">
+        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="1" y1="1" x2="13" y2="13"/>
+          <line x1="13" y1="1" x2="1" y2="13"/>
+        </svg>
+      </button>
+      <span class="modal-label">ARTIST</span>
+      <span class="modal-artist" id="modalArtistName"></span>
+    </div>
+    <div class="modal-sep"></div>
+    <div class="dsp-list" id="dspList"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+ 
+<script>
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+ 
+  const loader = document.getElementById('loader');
+  window.addEventListener('load', () => setTimeout(() => loader.classList.add('hidden'), 1200));
+  setTimeout(() => loader.classList.add('hidden'), 3000);
+ 
+  const DSP_ICONS = {
+    spotify: { emoji: '♫', color: '#1ed760' },
+    apple:   { emoji: '♪', color: '#fc3c44' },
+    amazon:  { emoji: '◈', color: '#ff9900' },
+    pandora: { emoji: '◉', color: '#00a7e5' },
+  };
+ 
+  const ARTISTS = [
+    {
+      name: 'REMØRA',
+      instagram: 'https://www.instagram.com/remora_sleep/',
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/intl-pt/artist/0Nbqt5GUfuG7JetAjGcBxl?si=jvIZEaQ7T-y1MwmZb9ZcRw' },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/pt/artist/rem%C3%B8ra/1836144007' },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: 'https://www.amazon.com/music/player/artists/B0F7Y23MXH/rem%C3%B8ra' },
+        { platform: 'pandora', label: 'PANDORA',      url: 'https://pandora.app.link/UXvQOySL0Vb' },
+      ]
+    },
+    {
+      name: 'MIREO SUN',
+      instagram: 'https://www.instagram.com/mireo.sun.music/',
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/intl-pt/artist/5eDiMSZlATc1w6HY7DG5T2?si=ZhHSLhjXTW6yGJ7y-kw82g' },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/us/artist/mireo-sun/1895830129' },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: 'https://music.amazon.com/artists/B0GYZDLWFZ/mireo-sun' },
+        { platform: 'pandora', label: 'PANDORA',      url: 'https://pandora.app.link/lut2nhKXw3b' },
+      ]
+    },
+    {
+      name: 'NOVARION',
+      instagram: 'https://www.instagram.com/novarionsleep/',
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/intl-pt/artist/7DiT7CA5PgStZrg6shM4Pl' },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/us/artist/novarion/1820351682' },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: 'https://music.amazon.com/artists/B0FD35MVYW/novarion' },
+        { platform: 'pandora', label: 'PANDORA',      url: 'https://www.pandora.com/artist/novarion/ARfltqg3j2kz5tK?part=ug-desktop&corr=84571138021155939' },
+      ]
+    },
+    {
+      name: 'THEO SOUMNA',
+      instagram: null,
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/artist/3LrO6ZDSpahX11KkDWGJCg?si=FT9sfBwST86WESjpdK_dvQ' },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/pt/artist/theo-soumna/1872123041' },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: 'https://music.amazon.com/artists/B0GJTXK638?ref=dm_sh_i7vd3YJz2OtAVeTXXlvkjfNhf' },
+        { platform: 'pandora', label: 'PANDORA',      url: 'https://pandora.app.link/kgCKaxAIW2b' },
+      ]
+    },
+    {
+      name: 'OWEN MAREK',
+      instagram: null,
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: 'https://open.spotify.com/artist/05h5sty3jc98PuowHByCIK?si=g0dID4hoS_O90EBtYIQA9g' },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: 'https://music.apple.com/pt/artist/owen-marek/1872133697' },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: 'https://music.amazon.com/artists/B0GJV1G578?ref=dm_sh_iUA7pA4ESuWCaBrum3SMEvYLO' },
+        { platform: 'pandora', label: 'PANDORA',      url: 'https://pandora.app.link/Cxz7jryIW2b' },
+      ]
+    },
+    {
+      name: 'ELIAS VARYN',
+      instagram: null,
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: null },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: null },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: null },
+        { platform: 'pandora', label: 'PANDORA',      url: null },
+      ]
+    },
+    {
+      name: 'NOAH SELVEK',
+      instagram: null,
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: null },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: null },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: null },
+        { platform: 'pandora', label: 'PANDORA',      url: null },
+      ]
+    },
+    {
+      name: 'ADRIAN VALE',
+      instagram: null,
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: null },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: null },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: null },
+        { platform: 'pandora', label: 'PANDORA',      url: null },
+      ]
+    },
+    {
+      name: 'MILAN ORVEK',
+      links: [
+        { platform: 'spotify', label: 'SPOTIFY',      url: null },
+        { platform: 'apple',   label: 'APPLE MUSIC',  url: null },
+        { platform: 'amazon',  label: 'AMAZON MUSIC', url: null },
+        { platform: 'pandora', label: 'PANDORA',      url: null },
+      ]
+    },
+  ];
+ 
+  const listEl = document.getElementById('artistList');
+  ARTISTS.forEach(artist => {
+    const item = document.createElement('div');
+    item.className = 'artist-item';
+    item.innerHTML = `
+      <div class="hover-glow"></div>
+      <span class="artist-name">${artist.name}</span>
+      <div class="artist-divider"></div>
+    `;
+    item.addEventListener('click', () => openModal(artist));
+    listEl.appendChild(item);
+  });
+ 
+  const backdrop        = document.getElementById('modalBackdrop');
+  const modalBlur       = document.getElementById('modalBlur');
+  const modalClose      = document.getElementById('modalClose');
+  const modalArtistName = document.getElementById('modalArtistName');
+  const dspList         = document.getElementById('dspList');
+ 
+  const modalFooter = document.getElementById('modalFooter');
+ 
+  function openModal(artist) {
+    modalArtistName.textContent = artist.name;
+    dspList.innerHTML = '';
+    artist.links.forEach(link => {
+      if (link.url) {
+        const a = document.createElement('a');
+        a.className = 'dsp-link';
+        a.href = link.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.innerHTML = `
+          <div class="dsp-text">
+            <span class="dsp-name">${link.label}</span>
+            <span class="dsp-platform-line"></span>
+          </div>
+          <div class="dsp-ext">
+            <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="1" y1="9" x2="9" y2="1"/>
+              <polyline points="4,1 9,1 9,6"/>
+            </svg>
+          </div>
+        `;
+        dspList.appendChild(a);
+      } else {
+        const div = document.createElement('div');
+        div.className = 'dsp-coming-soon';
+        div.innerHTML = `
+          <div class="dsp-text"><span class="dsp-name">${link.label}</span></div>
+          <span class="coming-soon-text">SOON</span>
+        `;
+        dspList.appendChild(div);
+      }
+    });
+ 
+    // Footer: instagram link or generic phrase
+    if (artist.instagram) {
+      modalFooter.innerHTML = `
+        <a class="modal-insta-link" href="${artist.instagram}" target="_blank" rel="noopener noreferrer">
+          <div class="modal-insta-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          INSTAGRAM
+        </a>
+      `;
+    } else {
+      modalFooter.innerHTML = `
+        <span class="modal-footer-text">listen on your preferred platform</span>
+      `;
+    }
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+ 
+  function closeModal() {
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+ 
+  modalClose.addEventListener('click', closeModal);
+  modalBlur.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
+ 
