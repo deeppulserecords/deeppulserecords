@@ -31,23 +31,6 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <form className="mx-auto mt-12 grid max-w-2xl gap-4">
-          <label className="grid gap-2 text-sm text-charcoal/65">
-            Name
-            <input name="name" autoComplete="name" className="rounded-2xl border border-ink/10 bg-porcelain/80 px-5 py-4 text-ink outline-none transition focus:border-ink/30" />
-          </label>
-          <label className="grid gap-2 text-sm text-charcoal/65">
-            Email
-            <input name="email" type="email" autoComplete="email" className="rounded-2xl border border-ink/10 bg-porcelain/80 px-5 py-4 text-ink outline-none transition focus:border-ink/30" />
-          </label>
-          <label className="grid gap-2 text-sm text-charcoal/65">
-            Message
-            <textarea name="message" rows={5} placeholder="Tell us if this is a playlist submission, demo, or catalogue enquiry." className="resize-none rounded-2xl border border-ink/10 bg-porcelain/80 px-5 py-4 text-ink outline-none transition focus:border-ink/30" />
-          </label>
-          <button type="submit" className="mt-3 rounded-full border border-ink/12 bg-ink px-7 py-4 text-sm text-porcelain transition hover:-translate-y-0.5 hover:bg-charcoal">
-            Send Message
-          </button>
-        </form>
       </section>
     </main>
   );
