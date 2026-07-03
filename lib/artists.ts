@@ -74,14 +74,14 @@ export const artists: DeeppulseArtist[] = [
     ]
   },
   {
-    name: "NOAH SELVEK",
-    instagram: null,
-    links: [
-      { platform: "spotify", label: "https://open.spotify.com/intl-pt/artist/6eCgsHJWXTmxPOa22DbIAM?si=0TcXt2UQRhG3A2lDMTM-zQ", url: null },
-      { platform: "apple", label: "https://music.apple.com/us/artist/noah-selvek/1885828203", url: null },
-      { platform: "amazon", label: "https://music.amazon.com/artists/B0GSW7HTHF/noah-selvek", url: null },
-      { platform: "pandora", label: "https://pandora.app.link/Ya8V8WK5s4b", url: null }
-    ]
+  name: "NOAH SELVEK",
+instagram: null,
+links: [
+  { platform: "spotify", label: "SPOTIFY", url: "https://open.spotify.com/intl-pt/artist/6eCgsHJWXTmxPOa22DbIAM?si=0TcXt2UQRhG3A2lDMTM-zQ" },
+  { platform: "apple", label: "APPLE MUSIC", url: "https://music.apple.com/us/artist/noah-selvek/1885828203" },
+  { platform: "amazon", label: "AMAZON MUSIC", url: "https://music.amazon.com/artists/B0GSW7HTHF/noah-selvek" },
+  { platform: "pandora", label: "PANDORA", url: "https://pandora.app.link/Ya8V8WK5s4b" }
+]
   },
   {
     name: "ADRIAN VALE",
