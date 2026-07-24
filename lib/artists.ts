@@ -33,6 +33,16 @@ export const artists: DeeppulseArtist[] = [
       { platform: "pandora", label: "PANDORA", url: "https://pandora.app.link/lut2nhKXw3b" }
     ]
   },
+   {
+  name: "AGA NOVA",
+instagram: null,
+links: [
+  { platform: "spotify", label: "SPOTIFY", url: "coming" },
+  { platform: "apple", label: "APPLE MUSIC", url: "coming" },
+  { platform: "amazon", label: "AMAZON MUSIC", url: "coming" },
+  { platform: "pandora", label: "PANDORA", url: "coming" }
+]
+  },
   {
     name: "NOVARION",
     instagram: "https://www.instagram.com/novarionsleep/",
