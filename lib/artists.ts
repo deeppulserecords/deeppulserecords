@@ -37,10 +37,10 @@ export const artists: DeeppulseArtist[] = [
   name: "AGA NOVA",
 instagram: null,
 links: [
-  { platform: "spotify", label: "SPOTIFY", url: "coming" },
-  { platform: "apple", label: "APPLE MUSIC", url: "coming" },
-  { platform: "amazon", label: "AMAZON MUSIC", url: "coming" },
-  { platform: "pandora", label: "PANDORA", url: "coming" }
+  { platform: "spotify", label: "SPOTIFY", url: "https://open.spotify.com/intl-pt/artist/5hhW69WDZNSlE1zkrgsPkr?si=nipepoOBQ0a1ezDlC32aXA" },
+  { platform: "apple", label: "APPLE MUSIC", url: "https://music.apple.com/us/artist/aga-nova/6793108921" },
+  { platform: "amazon", label: "AMAZON MUSIC", url: "https://music.amazon.com/artists/B0H9SKLXP9/aga-nova" },
+  { platform: "pandora", label: "PANDORA", url: "https://pandora.app.link/jdMhqUieM5b" }
 ]
   },
   {
