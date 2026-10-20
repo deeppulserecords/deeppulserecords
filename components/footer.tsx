@@ -1,9 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Instagram } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { siteConfig } from "@/lib/metadata";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // The home page is intentionally just the title and the latest releases.
+  if (pathname === "/") return null;
+
   return (
     <footer className="border-t border-ink/8 bg-porcelain">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-12 md:flex-row md:items-center md:justify-between md:px-10">
